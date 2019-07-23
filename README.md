@@ -183,6 +183,73 @@
                 c(3);
                 16
 
+                        
+<h3 id='3.6'>3.6 防抖动和截流</h3>
+                
+#### 1) 相同点
+> - 防止用户频繁的操作造成阻塞或者屏幕抖动，提升用户体验
+> - 提升性能
+#### 2) 不同点
+> - 防抖动是发生在操作与操作之间的时间空隙，拉长操作之间的延迟时间
+> - 截流是指在连续重复的操作中，保证每次的操作时间周期，一般比操作实际运行的时间要长
+#### 3) 防抖动
+> - 需要用到setTimeout
+> - 用bounce对回调函数进行包装
+> - 注意setTimeout和的作用域：内部延迟执行的代码中的this永远指向window，但是回调函数本身的this可以指向其他，所以setTimeout需要先在全局进行定义。
+                
+                let myTimer;
+                let bounce = function(delayTime, callback) {
+                    clearTimeout(myTimer);
+                    myTimer = setTimeout(function() {
+                            if(callback) callback()
+                            console.log('用户的操作。。。');
+                        }, delayTime);
+                }
+
+                document.addEventListener('click', function() {
+                    bounce(3000);
+                });
+#### 4) 截流
+> - 需要比较实际运行时间长度和设定的周期时间
+> - 立即执行，无需使用setTimeout
+> - 如果实际运行时间长度 > 设定的周期时间, 则运行回调，并且把当前时间戳设为旧时间戳；
+                
+                let old = new Date();
+                let flow = function(cycleTime, callback) {
+                    let now = new Date();
+                    if (now - old > cycleTime) {
+                        if (callback) callback();
+                        old = now;
+                    }
+                }
+
+                document.addEventListener('click', function() {
+                    flow(3000, function() {
+                            console.log('i am working');
+                        });
+                });
+#### 5) 防抖动和截流合并
+> - 在截流里面把防抖动的函数写进去
+                
+                let old = new Date();
+                let myTimer;
+                let bounceAndFlow = function(cycleTime, delayTime, callback) {
+                    let now = new Date();
+                    if (now - old > cycleTime) {
+                        console.log('Flow。。。');
+                        clearTimeout(myTimer);
+                        myTimer = setTimeout(function() {
+                                if(callback) callback()
+                            }, delayTime);
+                        old = now;
+                    }
+                }
+
+                document.addEventListener('click', function() {
+                    bounceAndFlow(3000, 5000, function() {
+                            console.log('i am working');
+                        });
+                });
 
 <h3 id='3.7'>3.7 new</h3>
                 
@@ -192,9 +259,10 @@
 > - 对象的属性需要函数去更换自身的作用域为对象的作用域获得
                 
                 Function.prototype.myNew = function() {
-                    let obj;
+                    let obj = {};
                     obj.__proto__ = this.prototype;
-                    this.call(obj, ...arguments);
+                    let argu = [].slice.call(arguments);
+                    this.call(obj, ...argu);
                     return obj;
                 }
 
@@ -206,7 +274,15 @@
                     console.log(this.num1 + this.num2);
                 }
 
-                a.myNew()
+                let b = a.myNew(1,2);
+                b.tell(); // 3
+
+                let c = new a(1,2);
+
+>>>>>> ![图3-1 new原理]()
+>>>>>> 
+
+
 
 
 
