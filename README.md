@@ -28,6 +28,7 @@
 ### [2.6 最大重复子序列](#2.6)
 ### [2.7 最大重复子数组](#2.7)
 ### [2.8 ajax封装](#2.8)
+### [2.9 String.format](#2.9)
 ## [三、原理实现篇](#3)
 ### [3.1 call/apply/bind](#3.1)
 ### [3.2 promise](#3.2)
@@ -50,6 +51,8 @@
 ### [5.3 轮播](#5.3)
 ### [5.4 滑动](#5.4)
 ### [5.5 级联](#5.5)
+### [5.6 图片剪裁](#5.6)
+### [5.7 Tab](#5.7)
 ## [六、CSS效果篇](#5)
 ### [6.1 水平居中](#6.1)
 ### [6.2 垂直居中](#6.2)
@@ -65,6 +68,15 @@
 ------      
         
 <h2 id='2'>二、常用方法篇</h2>
+<h3 id='2.1'>拷贝</h3>
+
+        
+#### 1) 数组浅拷贝
+> - 使用
+#### 2) 数组深拷贝
+> - 
+> - 
+                
 <h3 id='2.2'>类数组判断与转化</h3>
 
         
@@ -102,6 +114,25 @@
                     return arr;
                 }
 
+
+<h3 id='2.9'>2.9 String.format</h3>
+        
+        
+#### 1) 功能
+> - 是一个函数
+> - 相当于字符串模板
+> - 第一个参数是模板，第二个参数是识别模板变量的边界，后面的参数是模板的数据
+> - 挂载到String上
+> - 分别用两个正则表达式切割关键词和非关键词，然后在进行拼接
+                
+                String.prototype.iFormat = function(data) {
+                    let keyArray = this.match(/(?<=\$\{)\S+?(?=\})/g);
+                    let strArray = this.split(/\$\{\S+?\}/g);
+                    return strArray.map((item, index) => data[keyArray[index]] ? item + data[keyArray[index]] : item).join('');
+                }
+
+                let str = "${a}ads${a}sad${b}as${c}zx${c}";
+                str.iFormat({a: ' I ', b: ' love ', c: ' you '}); //" I ads I sad love as you zx you "
 
 
 <h2 id='1'>三、原理实现篇</h2>
@@ -198,7 +229,7 @@
 > - 注意setTimeout和的作用域：内部延迟执行的代码中的this永远指向window，但是回调函数本身的this可以指向其他，所以setTimeout需要先在全局进行定义。
                 
                 let myTimer;
-                let bounce = function(delayTime, callback) {
+                let deBounce = function(delayTime, callback) {
                     clearTimeout(myTimer);
                     myTimer = setTimeout(function() {
                             if(callback) callback()
@@ -207,15 +238,15 @@
                 }
 
                 document.addEventListener('click', function() {
-                    bounce(3000);
+                    deBounce(3000);
                 });
-#### 4) 截流
+#### 4) 截流/频率控制
 > - 需要比较实际运行时间长度和设定的周期时间
 > - 立即执行，无需使用setTimeout
 > - 如果实际运行时间长度 > 设定的周期时间, 则运行回调，并且把当前时间戳设为旧时间戳；
                 
                 let old = new Date();
-                let flow = function(cycleTime, callback) {
+                let throttle = function(cycleTime, callback) {
                     let now = new Date();
                     if (now - old > cycleTime) {
                         if (callback) callback();
@@ -224,7 +255,7 @@
                 }
 
                 document.addEventListener('click', function() {
-                    flow(3000, function() {
+                    throttle(3000, function() {
                             console.log('i am working');
                         });
                 });
@@ -233,7 +264,7 @@
                 
                 let old = new Date();
                 let myTimer;
-                let bounceAndFlow = function(cycleTime, delayTime, callback) {
+                let bounceAndThrottle = function(cycleTime, delayTime, callback) {
                     let now = new Date();
                     if (now - old > cycleTime) {
                         console.log('Flow。。。');
@@ -246,7 +277,7 @@
                 }
 
                 document.addEventListener('click', function() {
-                    bounceAndFlow(3000, 5000, function() {
+                    debounceAndThrottle(3000, 5000, function() {
                             console.log('i am working');
                         });
                 });
