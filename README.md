@@ -40,19 +40,22 @@
 ### [3.8 Object.create()](#3.8)
 ### [3.9 Object.keys/Object.values/Object.entries](#3.9)
 ### [3.10 Array.map/Array.forEach/Array.reduce/Array.slice/Array.splice](#3.10)
+### [3.11 监听器类](#3.11)
 ## [四、正则表达式篇](#4)
 ### [4.1 电话号码](#4.1)
 ### [4.2 身份证](#4.2)
 ### [4.3 网址](#4.3)
 ### [4.4 邮箱](#4.4)
 ## [五、js和html效果篇](#5)
-### [5.1 拖拽](#5.1)
-### [5.2 图片懒加载](#5.2)
-### [5.3 轮播](#5.3)
-### [5.4 滑动](#5.4)
-### [5.5 级联](#5.5)
-### [5.6 图片剪裁](#5.6)
-### [5.7 Tab](#5.7)
+### [5.1 获取高度和宽度](#5.1)
+### [5.2 拖拽](#5.2)
+### [5.3 图片懒加载](#5.3)
+### [5.4 轮播](#5.4)
+### [5.5 滑动](#5.5)
+### [5.6 级联](#5.6)
+### [5.7 图片剪裁](#5.7)
+### [5.8 图片压缩](#5.8)
+### [5.9 Tab](#5.9)
 ## [六、CSS效果篇](#5)
 ### [6.1 水平居中](#6.1)
 ### [6.2 垂直居中](#6.2)
@@ -119,10 +122,9 @@
         
         
 #### 1) 功能
-> - 是一个函数
+> - 是一个函数挂载到String的原型上
 > - 相当于字符串模板
-> - 第一个参数是模板，第二个参数是识别模板变量的边界，后面的参数是模板的数据
-> - 挂载到String上
+> - 参数是模板的数据
 > - 分别用两个正则表达式切割关键词和非关键词，然后在进行拼接
                 
                 String.prototype.iFormat = function(data) {
@@ -310,8 +312,74 @@
 
                 let c = new a(1,2);
 
->>>>>> ![图3-1 new原理]()
->>>>>> 
+>>>>>> ![图3-1 new原理](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE3-1%20new%E5%8E%9F%E7%90%86.png?raw=true)
+
+<h3 id='3.11'>3.11 监听器类</h3>
+                
+#### 1) 要点
+> - 监听器listener：其实是一系列的函数
+> - 监听器类型: type
+> - 监听器注册表：
+                
+                let _registers = [
+                                    {
+                                        type: '',
+                                        listener: ''
+                                    },
+                                    ...
+                                ]
+> - 监听器列表：
+                
+                let _listeners = {
+                    type1: [
+                            listener1,
+                            listener2,
+                            ...
+                    ],
+                    type2: [
+                            listener1,
+                            listener2,
+                            ...
+                    ],
+                    ...
+                }
+> - 建立一个类
+>> - 原型变量:注册表和监听器列表
+>> - 原型方法：添加/删除 某类型的监听器
+                
+                
+#### 2) 代码
+                let Listen = function() {
+
+                }
+                Listen.prototype = {
+                    _listeners: {},
+                    _registers: [],
+                    addListener: function(type, listener) {
+                        this._listeners[type] = this._listeners[type] ? this._listeners[type] : [];
+                        this._listeners[type].push(listener);
+                    },
+                    removeListener: function(type, listener) {
+                        let index = this._listeners[type].indexOf(listener);
+                        if (index >= 0) {
+                            this._listeners[type].splice(index,index+1);
+                        }
+                    },
+                    register: function(type, listener) {
+                        this._registers.push(
+                            {
+                                type: type,
+                                listener: listener
+                            }
+                        )
+                    },
+                    trigger: function(type, var_args) {
+                        let funcs = this._listeners[type];
+                        let args = [].slice.call(arguments, 1);
+                        return funcs.map(func => func.apply(this, args));
+                    }
+                }
+                Listen.prototype.contructor = Listen;
 
 
 
