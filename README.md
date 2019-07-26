@@ -9,16 +9,9 @@
 
 ## 目录
 ## [一、类型判断篇](#1)
-### [1.1 字符串](#1.1)
-### [1.2 数字](#1.2)
-### [1.3 布尔](#1.3)
-### [1.4 null](#1.4)
-### [1.5 undefined](#1.5)
-### [1.6 原生对象](#1.6)
-### [1.7 日期](#1.7)
-### [1.8 函数](#1.8)
-### [1.9 正则表达式](#1.9)
-### [1.10 平台](#1.10)
+### [1.1 基本数据类型](#1.1)
+### [1.2 对象类型系统](#1.2)
+### [1.3 平台](#1.13)
 ## [二、常用方法篇](#2)
 ### [2.1 拷贝](#2.1)
 ### [2.2 类数组判断与转化](#2.2)
@@ -70,15 +63,93 @@
         
 ------      
         
+<h2 id='1'>一、类型判断篇</h2>
+<h3 id='1.1'>1.1 基本数字类型</h3>
+
+        
+#### 1) null
+> - 直接跟v他自己比较即可
+                
+                function isNull(o) {
+                    return o === null;
+                }
+#### 2) NaN
+> - 因为它连跟它自己比较都不相等，可以用此特性进行判断
+                
+                function isNaN(o) {
+                    return o !== o;
+                }
+#### 3) undefined
+> - undefined它并不是一个保留词，他是全局对象的一个属性，这说明什么呢？说明它有可能会被改写。到了ES5被改成只读了，但是在局部作用域中还是会被改写，虽然在最新的chrome 75.0.3770.142中我并没有发现改写-.-||
+> - 为什么是void 0? 因为根据MDN的解释：The void operator evaluates the given expression and then returns undefined. 无论你给他赋什么的值，都会返回undefined，而0应该是最简单的喽
+                
+                function isUndefined(o) {
+                    return o === void 0;
+                }
+#### 4) number
+> - 采用鸭子辩型
+> - 因为如果纯粹使用typeof的话会把包装类也识别成对象；
+                
+                function isNumber(o) {
+                    return '[object Number]' === {}.toString.call(o) && isFinite(o); 
+                }
+#### 5) boolean
+> - 采用鸭子辩型
+> - 因为如果纯粹使用typeof的话会把包装类也识别成对象；
+                
+                function isboolean(o) {
+                    return '[object Boolean]' === {}.toString.call(o); 
+                }
+
+<h3 id='1.2'>1.2 对象类型系统</h3>
+
+#### 1) object
+> - 
+
+
+<h3 id='1.2'>1.2 对象类型系统</h3>
+
+#### 1) window
+> - 
+> - 
+> -                           
+
+
+
+------      
+        
 <h2 id='2'>二、常用方法篇</h2>
 <h3 id='2.1'>拷贝</h3>
 
         
 #### 1) 数组浅拷贝
-> - 使用
+> - Object.assign
+> - 
 #### 2) 数组深拷贝
-> - 
-> - 
+> - 先对输入进行判断，是数组、对象还是其他
+> - 然后如果是数组或者对象的时候进行遍历，子元素是数组或者对象的时候直接赋值，否则进行递归
+                
+                let deepCopy = function(obj) {
+                    let o;
+                    let type = Object.prototype.toString.call(obj);
+                    if(type === '[object Array]' || type === '[object Object]') {
+                        o = type === '[object Array]' ? [] : {};
+                        for(let key in obj) {
+                            if(obj.hasOwnProperty(key)) {
+                                if(typeof obj[key] === 'Object') {       
+                                    o[key] = deepCopy(obj[key]);
+                                }
+                                else {
+                                    o[key] = obj[key];
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        o = obj;
+                    }
+                    return o;
+                };
                 
 <h3 id='2.2'>类数组判断与转化</h3>
 
