@@ -889,9 +889,8 @@
                 }
                 Listen.prototype.contructor = Listen;
 
-
                         
-<h3 id='3.6'>3.6 防抖动和截流</h3>
+<h3 id='3.5'>3.5 防抖动和截流</h3>
                 
 #### 1) 相同点
 > - 防止用户频繁的操作造成阻塞或者屏幕抖动，提升用户体验
@@ -957,6 +956,209 @@
                             console.log('i am working');
                         });
                 });
+
+                        
+<h3 id='3.6'>3.6 类的继承</h3>
+                
+#### 1) 属性拷贝
+> - 这是最简单的，把父类的属性全都拷贝一份
+#### 2) 原型式继承
+> - 只能继承父构造函数的原型对象上的成员, 不能继承父构造函数的实例对象的成员
+                
+                // 父类
+                function Parent(age) {
+                    this.age = age;
+                    this.friends = ['a', 'b'];
+                }
+                Parent.prototype.name = ['lvweiyaun'];
+                Parent.prototype.tellName = function() {
+                    console.log(this.name);
+                }
+
+                // 子类
+                function Child(sex) {
+                    this.sex = sex;
+                }
+                Child.prototype = Parent.prototype;
+                Child.prototype.constructor = Child;
+                let child1 = new Child('male');
+                console.log('child1.name = ', child1.name);
+                console.log('child1.friends = ', child1.friends);
+
+                // child1.name =  ["lvweiyaun"]
+                // undefined
+
+#### 3) 原型链继承
+> - 将父类的公有和私有属性和公有方法都继承过来的
+> - 优点：直接把父类的原型（浅）拷贝过来，简单易用
+> - 缺点
+>> - 新实例无法向父类构造函数传参
+>> - 存在父类私有引用类型属性共享的问题
+                
+                // 父类
+                function Parent(age) {
+                    this.age = age;
+                    this.friends = ['a', 'b'];
+                }
+                Parent.prototype.name = ['lvweiyaun'];
+                Parent.prototype.tellName = function() {
+                    console.log(this.name);
+                }
+
+                // 子类
+                function Child(sex) {
+                    this.sex = sex;
+                }
+                Child.prototype = new Parent(50);
+                Child.prototype.constructor = Child;
+                let child1 = new Child('male');
+                console.log('child1.friends = ', child1.friends);
+                let child2 = new Child('female');
+                console.log('child2.friends = ', child2.friends);
+                child2.friends.push('lvhongbin');
+                console.log('child2.friends = ', child2.friends);
+                console.log('child1.friends = ', child1.friends);
+
+                // child1.friends =  ["a", "b"]
+                // child2.friends =  ["a", "b"]
+                // child2.friends =  ["a", "b", "lvhongbin"]
+                // child1.friends =  ["a", "b", "lvhongbin"]
+                
+#### 4) 构造函数继承
+> - 使用call继承父类的构造函数
+> - 好处：可以得到父类的构造函数属性，向父类构造函数传参。
+> - 坏处：无法得到父类的原型属性
+                
+                // 父类
+                function Parent(age) {
+                    this.age = age;
+                }
+                Parent.prototype.name = ['lvweiyaun'];
+                Parent.prototype.tellName = function() {
+                    console.log(this.name);
+                }
+
+                // 子类
+                function Child(sex, age) {
+                    Parent.call(this, age);
+                    this.sex = sex;
+                }
+                let child1 = new Child('male', 20);
+                console.log('child1.name = ', child1.name);
+                let child2 = new Child('female', 22);
+                console.log('child2.name = ', child2.name);
+                child2.name.push('lvhongbin');
+                console.log('child2.name = ', child2.name);
+                let p = new Parent(55);
+                console.log('p.name = ', p.name);
+                console.log('child1.name = ', child1.name);
+                console.log('child1.age = ', child1.age);
+
+
+                // child1.name =  undefined
+                // child2.name =  undefined
+                // error!
+                p.name =  ["lvweiyaun"]
+                // child1.name =  undefined
+                child1.age =  20
+
+#### 5) 组合继承
+> - 原型链继承 + 构造函数继承
+> - 解决了对象共享的问题，还能拿到父类的构造函数
+> - 但是存在性能问题，因为父类有两次构造
+                
+                // 父类
+                function Parent(age) {
+                    this.age = age;
+                    this.friends = ['a', 'b'];
+                }
+
+                Parent.prototype.name = ['lvweiyaun'];
+                Parent.prototype.tellName = function() {
+                    console.log(this.name);
+                }
+
+                // 子类
+                function Child(sex, age) {
+                    Parent.call(this, age);
+                    this.sex = sex;
+                }
+                Child.prototype = new Parent(50);
+                Child.prototype.constructor = Child;
+                let child1 = new Child('male', 20);
+                console.log('child1.name = ', child1.name);
+                console.log('child1.friends = ', child1.friends);
+                let p = new Parent(55);
+                console.log('p.name = ', p.name);
+                console.log('child1.name = ', child1.name);
+                console.log('child1.age = ', child1.age);
+
+
+                // child1.name =  ["lvweiyaun"]
+                // child1.friends =  ["a", "b"]
+                // p.name =  ["lvweiyaun"]
+                // child1.name =  ["lvweiyaun"]
+                // child1.age =  20
+
+#### 6) 组合继承优化1
+> - 原型式继承 + 构造函数继承
+> - 解决了对象共享的问题，还能拿到父类的构造函数
+> - 不存在性能问题
+> - 但是子类无法修改原型的constructor属性，因为一旦修改就会同时修改父类的constructor属性，换句话说无法辨别子类的构造函数是谁
+                
+                // 父类
+                function Parent(age) {
+                    this.age = age;
+                    this.friends = ['a', 'b'];
+                }
+                Parent.prototype.name = ['lvweiyaun'];
+                Parent.prototype.tellName = function() {
+                    console.log(this.name);
+                }
+
+                // 子类
+                function Child(sex, age) {
+                    Parent.call(this, age);
+                    this.sex = sex;
+                }
+                Child.prototype = Parent.prototype;
+                // Child.prototype.constructor = Child;
+                let child1 = new Child('male', 20);
+                console.log('child1.name = ', child1.name);
+                console.log('child1.friends = ', child1.friends);
+                let p = new Parent(55);
+                console.log('p.name = ', p.name);
+                console.log('child1.name = ', child1.name);
+                console.log('child1.age = ', child1.age);
+
+
+                // child1.name =  ["lvweiyaun"]
+                // child1.friends =  ["a", "b"]
+                // p.name =  ["lvweiyaun"]
+                // child1.name =  ["lvweiyaun"]
+                // child1.age =  20
+
+#### 7) 组合继承优化2
+> - 目前来讲比较完美的方法
+                
+                // 父类
+                function Parent(age) {
+                    this.age = age;
+                }
+                Parent.prototype.name = ['lvweiyaun'];
+                Parent.prototype.tellName = function() {
+                    console.log(this.name);
+                }
+
+                // 子类
+                function Child(sex, age) {
+                    Parent.call(this, age);
+                    this.sex = sex;
+                }
+                Child.prototype = deepCopy(Parent.prototype);
+                Child.prototype.constructor = Child;
+
+
 
 <h3 id='3.7'>3.7 new</h3>
                 
@@ -1062,3 +1264,7 @@
                 f(100, 1); // the shortest delayTime is 4.878787878787879 in chrome
                 f(1000, 1); // the shortest delayTime is  83.83883883883884 in chrome
                 
+
+
+
+
