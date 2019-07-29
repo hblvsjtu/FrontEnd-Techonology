@@ -24,7 +24,7 @@
 ### [2.9 String.format](#2.9)
 ## [三、原理实现篇](#3)
 ### [3.1 call/apply/bind](#3.1)
-### [3.2 promise](#3.2)
+### [3.2 Deferred和Promise](#3.2)
 ### [3.3 async/await](#3.3)
 ### [3.4 观察者模式](#3.4)
 ### [3.5 防抖动和截流](#3.5)
@@ -34,6 +34,7 @@
 ### [3.9 Object.keys/Object.values/Object.entries](#3.9)
 ### [3.10 Array.map/Array.forEach/Array.reduce/Array.slice/Array.splice](#3.10)
 ### [3.11 监听器类](#3.11)
+### [3.12 setTimeout 与 setInterval](#3.12)
 ## [四、正则表达式篇](#4)
 ### [4.1 电话号码](#4.1)
 ### [4.2 身份证](#4.2)
@@ -287,6 +288,473 @@
                 c(3);
                 16
 
+<h3 id='3.2'>Deferred和Promise</h3>
+
+        
+#### 1) promise/A规范
+> - 一个Promise对象有三种状态：未完成pendding，已完成Fulfilled和已拒绝Rejected
+> - pendding可以转化成Fulfilled或者Rejected，但Fulfilled和Rejected不能相互转化
+> - 转化的过程是不可逆的
+> - 使用then方法可以返回promise进行链式调用
+> - then方法的onFulfilled,onRejected 方法都是可选参数，且不是function，都被忽略
+#### 2) Deferred/promise
+> - 这两个是合在一起的，这里的promise非ES6里面的Promise对象，注意这里的p是小写
+> - Deferred更像是一个触发器
+> - promise的then方法用来传递handlerQueue序列，handlerQueue是由每个then方法里面resolve和reject组成的handler集合
+> - Deferred的resolve和reject遍历handlerQueue序列里面的handler，如果返回的结果是一个promise，就的Deferred的promise更新为返回的结果，如果不是的话就将结果作为下次resolve的实参。注意的是每遍历一个元素都需要把handlerQueue去掉相应的handler
+                
+                let promise = function() {
+                    this.handlerQueue = [];
+                }
+
+                promise.prototype.then = function(resolve, reject) {
+                    let handler = {};
+                    if(resolve && typeof resolve === 'function') 
+                        handler.resolve = resolve;
+                    if(reject && typeof reject === 'function') 
+                        handler.reject = reject;
+                    this.handlerQueue.push(handler);
+                    return this;
+                }
+
+                let Deferred = function() {
+                    this.state = 'pending';
+                    if(!this.promise) {
+                        this.promise = new promise();
+                    }
+                }
+
+                Deferred.prototype.resolve = function(data) {
+                    this.state = 'resolve';
+                    let handlerQueue = this.promise.handlerQueue;
+                    let res;
+                    let handler;
+                    while(handler = handlerQueue.shift()) {
+                        if (handler && handler.resolve) {
+                            res = handler.resolve(data);
+                            if (res && res instanceof promise) {
+                                res.handlerQueue = handlerQueue;
+                                let p = new promise();
+                                p.handlerQueue = handlerQueue;
+                                this.promise = p;
+                            }
+                            else if(res) {
+                                data = res;
+                            }
+                        }
+                    }
+                }
+
+                Deferred.prototype.reject = function(data) {
+                    this.state = 'reject';
+                    let handlerQueue = this.promise.handlerQueue;
+                    let res;
+                    let handler;
+                    while(handler = handlerQueue.shift()) {
+                        if (handler && handler.reject) {
+                            res = handler.reject(data);
+                            if (res && res instanceof promise) {
+                                res.handlerQueue = handlerQueue;
+                                this.promise = res;
+                                return; // 这里还是有问题，如果返回的是一个promise会直接中断运行
+                            }
+                            else if(res) {
+                                data = res;
+                            }
+                        }
+                    }
+                }
+
+                //------ test-------//
+                function asyncDosomeing(flag, name) {
+                    const deferred = new Deferred()
+                    setTimeout(function () {
+                        if (flag) {
+                            deferred.resolve({code: 200, message: '成功', name: name})
+                        } else {
+                            deferred.reject({code: 400, message: '失败', name: name})
+                        }
+                    }, 2000)
+                    return deferred.promise
+                }
+                asyncDosomeing(true, 'asyncDosomeing1').then(result => {
+                    console.info(result)
+                    return asyncDosomeing(false, 'asyncDosomeing2')
+                }).then(result => {
+                    console.info(result)
+                    return 'dadds'
+                }).then(result => {
+                    console.info(result)
+                })
+#### 2) Promise(第一次自己写的)
+> - Promise是Deferred/promise的混合版
+> - Promise既作触发器又做储存器
+> - 需要在resolve和reject上包装，已达到窃听的效果
+> - 实现resolve和reject原型方法
+> - 如果返回值是空类型，则正常返回this作链式调用，如果返回值非空也非Promise类型，则作为参数传到下一个then，可惜这个我实现不了
+                
+                let MyPromise = function(fn) {
+                    this.status = 'unfulfilled';
+                    this.fn = typeof fn === 'function' ? fn : function() {};
+                    this.resolve = function(func) {
+                            let newPromise = new Promise(func);
+                            newPromise.status = 'fulfilled';
+                            return newPromise;
+                    }
+
+                    this.reject = function(func) {
+                            let newPromise = new Promise(func);
+                            newPromise.status = 'failed';
+                            return newPromise;
+                    }
+                }
+                MyPromise.prototype.then = function(resolve, reject) {
+                    let self = this;
+                    this.resolve = resolve;
+                    this.reject = reject;
+                    let _resolve = function(a) {
+                        self.status = 'fulfilled';
+                        resolve(a);
+                    }
+                    let _reject = function(a) {
+                        self.status = 'failed';
+                        reject(a);
+                    }
+                    if (this.status === 'unfulfilled') 
+                            this.fn(_resolve, _reject);
+                    if (this.status === 'fulfilled') 
+                            this.fn(resolve);
+                    if (this.status === 'failed') 
+                            this.fn(reject);
+                    return this;
+                }
+
+                p = function(value) {
+                    return new MyPromise((resolve, reject) => {
+                        setTimeout(function() {
+                            if (value < 10) {
+                                resolve(value);
+                            }
+                            else {
+                                reject(value);
+                            }
+                        }, 1000)
+                    })
+                }
+                p(9)
+                .then(data => {
+                        console.log('fulfilled = ', data);
+                    }, data => {
+                        console.log('unfulfilled = ', data);
+                    })
+                .then(data => {
+                        console.log('transfer..');
+                        return data + 10;
+                    })
+                .then(data => {
+                        console.log('fulfilled = ', data);
+                    }, data => {
+                        console.log('unfulfilled = ', data);
+                    })
+                MyPromise.resolve((resolve) => {
+                    setTimeout(function() {
+                            resolve('i love you');
+                    }, 1000)
+                }).then(data => {
+                        console.log('fulfilled = ', data);
+                    })
+
+#### 3) Promise(看了别人代码后自己写的)
+> - 为了支持同步的Promise，采用异步调用_resolve和_reject
+> - then方法比较复杂，首先返回的是一个promise，然后根据不同的返回值类型进行进一步处理
+> - function(cal) {try {resolve(val) or reject(val)} catch(e) {reject(e)}}
+> - catch是唯一没有可能返回promise的函数
+> - resolve和reject方法就是返回一个仅有resolve或者reject方法的promise，同时resolve方法将判断参数的类型，如果参数是非promise类型，将会把它包装成promise类型
+> - all方法是返回一个promise，循环得到结果放到一个数组中，由于每个子项执行的时间不一致，只能新建计数器来统计then执行的次数，当计数器等于all的数组参数个数的时候才进行resolve的统一处理结果数组
+> - race方法是返回一个promise，遍历所有的promise数组，不需要搜集结果
+                
+                // 定义状态常量
+                const PENDDING = 'pendding';
+                const FULFILLED = 'fulfilled';
+                const UNFULFILLED = 'unfulfilled';
+
+                // 判断是否是函数类型
+                let isFunction = function (func) {
+                    return typeof func === 'function'
+                };
+
+                class MyPromise {
+
+                    constructor(handle) {
+
+                        // 判断handle是否是函数
+                        if (!isFunction(handle)) {
+                            throw new Error('Your handle is not function!')
+                        }
+
+                        // 定义初始状态
+                        this._status = PENDDING;
+
+                        // 定义每次执行函数的参数
+                        this._value = undefined;
+
+                        // 定义resolve队列和reject，用于链式调用
+                        this._resolveQueue = [];
+                        this._rejectQueue = [];
+
+                        // 执行handle;
+                        try {
+                            handle(this._resolve.bind(this), this._reject.bind(this));
+                        }
+                        catch(err) {
+                            this._reject(err);
+                        }
+                    }
+
+                    // 添加resolve时执行的函数
+                    _resolve(val) {
+
+                        // 判断此时的状态，如果是非PENDDING状态就直接结束
+                        if (this._status !== PENDDING) return;
+
+                        let run = function() {
+                            // 执行队列
+                            let execQueue = function(queue, argu) {
+                                let exec;
+                                while(exec = queue.shift()) {
+                                    exec(argu);
+                                }
+                            }
+
+                            // 判断val是否是MyPromise类型
+                            // 如果val是MyPromise类型则执行它
+                            // 如果val不是MyPromise类型则
+                            if (val instanceof MyPromise) {
+                                val.then(value => {
+                                    this._value = value;
+                                    this._status = FULFILLED;
+                                    execQueue(this._resolveQueue, this._value);
+                                }, error => {
+                                    this._value = error;
+                                    this._status = UNFULFILLED;
+                                    execQueue(this._rejectQueue, this._value);
+                                })
+                            }
+                            else {
+                                this._value = val;
+                                this._status = FULFILLED;
+                                execQueue(this._resolveQueue, this._value);
+                            }
+                        }
+
+                        // 为了支持同步的Promise，这里采用异步调用
+                        setTimeout(run.bind(this), 0);
+                    }  
+
+                    // 添加reject时执行的函数
+                    // 此时不需要判断参数类型是否是MyPromise类型
+                    _reject(error) {
+
+                        // 判断此时的状态，如果是非PENDDING状态就直接结束
+                        if (this._status !== PENDDING) return;
+
+                        let run = function() {
+                            // 执行队列
+                            let execQueue = function(queue, argu) {
+                                let exec;
+                                while(exec = queue.shift()) {
+                                    exec(argu);
+                                }
+                            }
+
+                            this._value = error;
+                            this._status = UNFULFILLED;
+                            execQueue(this._rejectQueue, this._value);
+                        }
+
+                        // 异步执行
+                        setTimeout(run.bind(this), 0);
+                    }
+
+                    // 添加then方法 用于承上启下
+                    // 当状态是PENDDING时保存每个状态的方法到相应队列
+                    // 返回的是一个MyPromise
+                    then(onFulfilled, onRejected) {
+                        // 初始化变量
+                        const _value = this._value;
+                        const _status = this._status;
+
+                        // onFulfilledNext, onRejectedNext为下一个then中的回调函数
+                        return new MyPromise((onFulfilledNext, onRejectedNext) => {
+
+                            // 封装一个可以执行一系列判断的onFulfilled
+                            let fulfilled = function(_value) {
+                                try {
+                                    if(isFunction(onFulfilled)) {  //判断onFulfilled是否是函数
+                                        let res = onFulfilled(_value);
+                                        if(res instanceof MyPromise) { // 假如res是一个MyPromise类型，则需要等res执行完毕才能跳到下一个状态
+                                            res.then(onFulfilledNext, onRejectedNext);
+                                        }
+                                        else { // 假如res不是一个MyPromise类型，则作为下一个then中回调函数中的参数
+                                            onFulfilledNext(res);
+                                        }
+                                    }
+                                    else { // 如果onFulfilled不是函数
+                                        onRejectedNext(_value);
+                                    }
+                                }
+                                catch (err) {
+                                    onRejectedNext(err);
+                                }
+                            }
+
+                            // 封装一个可以执行一系列判断的onRejected
+                            let rejected = function(_value) {
+                                try {
+                                    if(isFunction(onRejected)) { // 如果onRejected是函数
+                                        let res = onRejected(_value); 
+                                        if(res instanceof MyPromise) { // 假如res是一个MyPromise类型，则需要等res执行完毕才能跳到下一个状态
+                                            res.then(onFulfilledNext, onRejectedNext);
+                                        }
+                                        else {  // 假如res不是一个MyPromise类型，则作为下一个then中回调函数中的参数
+                                            onFulfilledNext(res);
+                                        }
+                                    }
+                                    else { // 如果onRejected不是函数
+                                        onRejectedNext(_value);
+                                    }
+                                }
+                                catch (err) {
+                                    onRejectedNext(err);
+                                }
+                            }
+
+                            // 判断_status的状态才决定执行怎样的处理函数
+                            switch (_status) {
+                                case PENDDING: // 如果是PENNDING的话把onFulfilled和onRejected保存到队列中
+                                    this._resolveQueue.push(fulfilled);
+                                    this._rejectQueue.push(rejected);
+                                    break
+                                case FULFILL: // 如果是FULFILL状态，则马上执行onFulfilled
+                                    fulfilled(_value);
+                                    break   
+                                case UNFULFILL:  // 如果是UNFULFILL状态，则马上执行onRejected
+                                    rejected(_value);
+                                    break
+                            }
+                        })
+                    }
+                    static resolve(val) {
+                        return val instanceof MyPromise ? val : new MyPromise((resolve, reject) => {
+                            resolve(val);
+                            })
+                    }
+                    static reject(err) {
+                        return new MyPromise((resolve, reject) => {
+                            reject(err);
+                        })
+                    }
+
+                    static catch(rejected) {
+                        return this.then(undefined, rejected);
+                    }
+
+                    static all(promiseArr) {
+                        let res = [];
+                        let num = 0;
+                        return new MyPromise((resolve, reject) => {
+                            promiseArr.forEach(item => {
+                                this.resolve(item).then(argu => {
+                                    res.push(argu);
+                                    num++;
+                                    if (num === promiseArr.length)
+                                        resolve(res)
+                                }, error => reject(error))
+                            })
+                        });
+                    }
+
+                    static race(promiseArr) {
+                        return new MyPromise((resolve, reject) => {
+                            promiseArr.forEach(item => {
+                                this.resolve(item).then(res => resolve(res), err => reject(err));
+                            })
+                        })
+                    }
+                }
+
+                p = function(value) {
+                    return new MyPromise((resolve, reject) => {
+                        setTimeout(function() {
+                            if (value < 10) {
+                                resolve(value);
+                            }
+                            else {
+                                reject(value);
+                            }
+                        }, 1000)
+                    })
+                }
+
+                p(9)
+                .then(data => {
+                        console.log('fulfilled = ', data);
+                        return data;
+                    }, data => {
+                        console.log('unfulfilled = ', data);
+                    })
+                .then(data => {
+                        console.log('transfer..');
+                        return p(data + 10);
+                    })
+                .then(data => {
+                        console.log('fulfilled = ', data);
+                    }, data => {
+                        console.log('unfulfilled = ', data);
+                    })
+
+                // 结果
+                fulfilled =  9
+                VM17445:9 transfer..
+                VM17445:15 unfulfilled =  19
+
+                let pTime = function(value, delay) {
+                    return new MyPromise((resolve, reject) => {
+                        setTimeout(function() {
+                            if (value < 10) {
+                                resolve(value);
+                            }
+                            else {
+                                reject(value);
+                            }
+                        }, delay)
+                    })
+                }
+
+                MyPromise.race([pTime(9, 5000), pTime(8, 3000), pTime(7, 1000)]).then(data => {
+                    console.log('fulfilled = ', data);
+                }, data => {
+                    console.log('unfulfilled = ', data);
+                }) 
+
+                //fulfilled =  7
+
+                MyPromise.race([pTime(18, 5000), pTime(19, 3000), pTime(20, 1000)]).then(data => {
+                    console.log('fulfilled = ', data);
+                }, data => {
+                    console.log('unfulfilled = ', data);
+                })
+
+                // unfulfilled =  20
+
+                MyPromise.all([pTime(7, 5000), pTime(8, 3000), pTime(9, 1000)]).then(data => {
+                    console.log('fulfilled = ', data);
+                }, data => {
+                    console.log('unfulfilled = ', data);
+                })
+
+                // fulfilled =  (3) [9, 8, 7]
+
                         
 <h3 id='3.6'>3.6 防抖动和截流</h3>
                 
@@ -452,6 +920,32 @@
                 }
                 Listen.prototype.contructor = Listen;
 
+<h3 id='3.12'>3.12 setTimeout 与 setInterval</h3>
+                
+#### 1) 最短间隔时间
+> - 如果回调时间大于间隔时间，浏览器才会执行，这也导致了真正的间隔时间比原来的大一点
+> - 这个最短间隔时间该怎么测呢？可以利用在定时器内再嵌一个定时器
+                
+                let timeList = [];
+                let f = function(total, delay) {
+                    let sum = 0;
+                    let c = 0;
+                    let id = setTimeout(function() {
+                        c++;
+                        timeList.push(new Date());
+                        if(c > total) {
+                            clearTimeout(id);
+                            for(let i = 0; i < total - 1; i++) {
+                                sum += timeList[i+1] - timeList[i];
+                            }
+                            console.log('the shortest delayTime is ', sum/(total - 1))
+                        }
+                        else setTimeout(arguments.callee, delay);
+                    }, delay);
+                }
+                f(100, 1); // the shortest delayTime is 4.878787878787879 in chrome
+                f(1000, 1); // the shortest delayTime is  83.83883883883884 in chrome
+                
 
 
 
