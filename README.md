@@ -11,7 +11,7 @@
 ## [一、类型判断篇](#1)
 ### [1.1 基本数据类型](#1.1)
 ### [1.2 对象类型系统](#1.2)
-### [1.3 平台](#1.13)
+### [1.3 平台](#1.3)
 ## [二、常用方法篇](#2)
 ### [2.1 拷贝](#2.1)
 ### [2.2 类数组判断与转化](#2.2)
@@ -33,7 +33,6 @@
 ### [3.8 Object.create()](#3.8)
 ### [3.9 Object.keys/Object.values/Object.entries](#3.9)
 ### [3.10 Array.map/Array.forEach/Array.reduce/Array.slice/Array.splice](#3.10)
-### [3.11 监听器类](#3.11)
 ### [3.12 setTimeout 与 setInterval](#3.12)
 ## [四、正则表达式篇](#4)
 ### [4.1 电话号码](#4.1)
@@ -106,15 +105,82 @@
 
 #### 1) object
 > - 
+                function isObject(o) {
+                    return '[object Object]' === {}.toString.call(o); 
+                }
+#### 2) 函数
+> - 
+                
+                function isFunction(o) {
+                    return '[object Function]' === {}.toString.call(o); 
+                }
+#### 3) 正则表达式
+> - 
+                
+                function isRegExp(o) {
+                    return '[object RegExp]' === {}.toString.call(o); 
+                }
+#### 4) 日期
+> - 
+                
+                function isDate(o) {
+                    return '[object Date]' === {}.toString.call(o); 
+                }
+#### 5) 数组
+> - 
+                
+                function isArray(o) {
+                    return '[object Array]' === {}.toString.call(o); 
+                }
+#### 6) 全类型判断
+                
+                function type(o) {
+                    if(o === null) return "null";
+                    else if(o !== o) return "NaN";
+                    else if(o === void 0) return "undefined";
+                    else {
+                        let type = {}.toString.call(o).slice(8, -1);
+                        return type ? type : '它不是基本类型'
+                    }
+                }
 
 
-<h3 id='1.2'>1.2 对象类型系统</h3>
-
+<h3 id='1.2'>1.3 平台</h3>
+        
 #### 1) window
-> - 
-> - 
-> -                           
-
+> - 需要区分不同的平台
+> - IE6、7、8利用window == document为真 但是document == window为假的神奇特性
+> - 标准浏览器及IE9,IE10等使用鸭子辩型的方法
+                
+                // IE6、7、8
+                function isWindow(obj) {
+                    return obj == obj.document && obj.document != obj;
+                }
+                // 标准浏览器及IE9,IE10
+                function isWindow(obj) {
+                    return /^\[object (Window|DOMWindow|global)/.test({}.toString.call(obj));
+                }
+#### 2）浏览器
+> - 判断浏览器类型
+> - 利用navigator.userAgent来判断
+> - 要把browsers数组里面的子项按照顺序来放，因为有时候userAgent里面会同时出现两种或以上的子项，当Safari出现的时候一般在userAgent的最后面，而"Chrome"次之，所以需要把他们放在前面先进行遍历
+                
+                function myBrowser(){
+                    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+                    // 此处要把
+                    let browsers = ["Safari", "Opera", "Firefox", "Chrome", "Edge", "compatible"];
+                    let browser = '';
+                    browsers.forEach(item => {
+                        if(userAgent.indexOf(item) > -1)
+                            browser = item;
+                    })
+                    if(browser === "compatible") {
+                        if(browser =userAgent.match(/(?:MSIE\s*)\d{1,2}.0(?=\s*;)/)) {
+                            browser = browser[0].replace('MS', '')
+                        }
+                    }
+                    return browser;
+                }             
 
 
 ------      
@@ -755,6 +821,76 @@
 
                 // fulfilled =  (3) [9, 8, 7]
 
+                
+                        
+<h3 id='3.4'>3.4 观察者模式</h3>
+                
+#### 1) 要点
+> - 监听器listener：其实是一系列的函数
+> - 监听器类型: type
+> - 监听器注册表：
+                
+                let _registers = [
+                                    {
+                                        type: '',
+                                        listener: ''
+                                    },
+                                    ...
+                                ]
+> - 监听器列表：
+                
+                let _listeners = {
+                    type1: [
+                            listener1,
+                            listener2,
+                            ...
+                    ],
+                    type2: [
+                            listener1,
+                            listener2,
+                            ...
+                    ],
+                    ...
+                }
+> - 建立一个类
+>> - 原型变量:注册表和监听器列表
+>> - 原型方法：添加/删除 某类型的监听器
+                
+                
+#### 2) 代码
+                let Listen = function() {
+
+                }
+                Listen.prototype = {
+                    _listeners: {},
+                    _registers: [],
+                    addListener: function(type, listener) {
+                        this._listeners[type] = this._listeners[type] ? this._listeners[type] : [];
+                        this._listeners[type].push(listener);
+                    },
+                    removeListener: function(type, listener) {
+                        let index = this._listeners[type].indexOf(listener);
+                        if (index >= 0) {
+                            this._listeners[type].splice(index,index+1);
+                        }
+                    },
+                    register: function(type, listener) {
+                        this._registers.push(
+                            {
+                                type: type,
+                                listener: listener
+                            }
+                        )
+                    },
+                    trigger: function(type, var_args) {
+                        let funcs = this._listeners[type];
+                        let args = [].slice.call(arguments, 1);
+                        return funcs.map(func => func.apply(this, args));
+                    }
+                }
+                Listen.prototype.contructor = Listen;
+
+
                         
 <h3 id='3.6'>3.6 防抖动和截流</h3>
                 
@@ -853,74 +989,7 @@
 
 >>>>>> ![图3-1 new原理](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE3-1%20new%E5%8E%9F%E7%90%86.png?raw=true)
 
-<h3 id='3.11'>3.11 监听器类</h3>
-                
-#### 1) 要点
-> - 监听器listener：其实是一系列的函数
-> - 监听器类型: type
-> - 监听器注册表：
-                
-                let _registers = [
-                                    {
-                                        type: '',
-                                        listener: ''
-                                    },
-                                    ...
-                                ]
-> - 监听器列表：
-                
-                let _listeners = {
-                    type1: [
-                            listener1,
-                            listener2,
-                            ...
-                    ],
-                    type2: [
-                            listener1,
-                            listener2,
-                            ...
-                    ],
-                    ...
-                }
-> - 建立一个类
->> - 原型变量:注册表和监听器列表
->> - 原型方法：添加/删除 某类型的监听器
-                
-                
-#### 2) 代码
-                let Listen = function() {
-
-                }
-                Listen.prototype = {
-                    _listeners: {},
-                    _registers: [],
-                    addListener: function(type, listener) {
-                        this._listeners[type] = this._listeners[type] ? this._listeners[type] : [];
-                        this._listeners[type].push(listener);
-                    },
-                    removeListener: function(type, listener) {
-                        let index = this._listeners[type].indexOf(listener);
-                        if (index >= 0) {
-                            this._listeners[type].splice(index,index+1);
-                        }
-                    },
-                    register: function(type, listener) {
-                        this._registers.push(
-                            {
-                                type: type,
-                                listener: listener
-                            }
-                        )
-                    },
-                    trigger: function(type, var_args) {
-                        let funcs = this._listeners[type];
-                        let args = [].slice.call(arguments, 1);
-                        return funcs.map(func => func.apply(this, args));
-                    }
-                }
-                Listen.prototype.contructor = Listen;
-
-<h3 id='3.12'>3.12 setTimeout 与 setInterval</h3>
+<h3 id='3.11'>3.11 setTimeout 与 setInterval</h3>
                 
 #### 1) 最短间隔时间
 > - 如果回调时间大于间隔时间，浏览器才会执行，这也导致了真正的间隔时间比原来的大一点
@@ -946,7 +1015,3 @@
                 f(100, 1); // the shortest delayTime is 4.878787878787879 in chrome
                 f(1000, 1); // the shortest delayTime is  83.83883883883884 in chrome
                 
-
-
-
-
