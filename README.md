@@ -28,12 +28,11 @@
 ### [3.3 async/await](#3.3)
 ### [3.4 观察者模式](#3.4)
 ### [3.5 防抖动和截流](#3.5)
-### [3.6 类](#3.6)
+### [3.6 类的继承](#3.6)
 ### [3.7 new](#3.7)
 ### [3.8 Object.create()](#3.8)
 ### [3.9 Object.keys/Object.values/Object.entries](#3.9)
-### [3.10 Array.map/Array.forEach/Array.reduce/Array.slice/Array.splice](#3.10)
-### [3.12 setTimeout 与 setInterval](#3.12)
+### [3.10 setTimeout 与 setInterval](#3.10)
 ## [四、正则表达式篇](#4)
 ### [4.1 电话号码](#4.1)
 ### [4.2 身份证](#4.2)
@@ -186,7 +185,7 @@
 ------      
         
 <h2 id='2'>二、常用方法篇</h2>
-<h3 id='2.1'>拷贝</h3>
+<h3 id='2.1'>2.1 拷贝</h3>
 
         
 #### 1) 数组浅拷贝
@@ -218,7 +217,7 @@
                     return o;
                 };
                 
-<h3 id='2.2'>类数组判断与转化</h3>
+<h3 id='2.2'>2.2 类数组判断与转化</h3>
 
         
 #### 1) 判断
@@ -275,7 +274,7 @@
                 str.iFormat({a: ' I ', b: ' love ', c: ' you '}); //" I ads I sad love as you zx you "
 
 
-<h2 id='1'>三、原理实现篇</h2>
+<h2 id='3'>三、原理实现篇</h2>
 <h3 id='3.1'>3.1 call/apply/bind</h3>
 
         
@@ -354,7 +353,7 @@
                 c(3);
                 16
 
-<h3 id='3.2'>Deferred和Promise</h3>
+<h3 id='3.2'>3.2 Deferred和Promise</h3>
 
         
 #### 1) promise/A规范
@@ -989,7 +988,55 @@
 
 >>>>>> ![图3-1 new原理](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE3-1%20new%E5%8E%9F%E7%90%86.png?raw=true)
 
-<h3 id='3.11'>3.11 setTimeout 与 setInterval</h3>
+<h3 id='3.8'>3.8 Object.create()</h3>
+                
+#### 1) 参数
+> - 第一个参数是原型对象
+> - 第二个参数是属性特性：value, writable, enumberable, congigurable
+                
+                Object.prototype.myCreate = function(proto, properties) {
+                    let f = function() {};
+                    f.prototype = proto;
+                    let o = new f();
+                    if (typeof properties === 'object') {
+                        Object.defineProperties(o, properties);
+                    }
+                    return o;
+                }
+
+<h3 id='3.9'>3.9 Object.keys/Object.values/Object.entries</h3>
+                
+#### 1) Object.keys
+> - 返回对象的每个可枚举的自身属性键名组成的数组
+                
+                Object.prototype.myKeys = function(o) {
+                    let arr = []
+                    for(let key in o) {
+                        if(o.hasOwnProperty(key)) arr.push(key);
+                    }
+                    return arr;
+                }
+#### 2) Object.values
+> - 返回对象的每个可枚举的自身属性键值组成的数组
+                
+                Object.prototype.myValues = function(o) {
+                    let arr = []
+                    for(let key in o) {
+                        if(o.hasOwnProperty(key)) arr.push(o[key]);
+                    }
+                    return arr;
+                }
+#### 2) Object.entrie
+> - 返回对象的每个可枚举的自身属性键名和键值组成的数组
+                Object.prototype.myEntries = function(o) {
+                    let arr = []
+                    for(let key in o) {
+                        if(o.hasOwnProperty(key)) arr.push([key, o[key]]);
+                    }
+                    return arr;
+                }
+
+<h3 id='3.10'>3.10 setTimeout 与 setInterval</h3>
                 
 #### 1) 最短间隔时间
 > - 如果回调时间大于间隔时间，浏览器才会执行，这也导致了真正的间隔时间比原来的大一点
