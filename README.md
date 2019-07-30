@@ -1,6 +1,7 @@
 # FET
 
 ## 作者：冰红茶  
+## 参考书籍：[JavaScript框架设计] 第二版 作者：司徒正美
     
 ------    
     
@@ -15,7 +16,7 @@
 ### [2.1 拷贝](#2.1)
 ### [2.2 类数组判断与转化](#2.2)
 ### [2.3 数组去重](#2.3)
-### [2.4 数组随机抽样](#2.4)
+### [2.4 数组洗牌](#2.4)
 ### [2.5 数组排序](#2.5)
 ### [2.6 最大重复子序列](#2.6)
 ### [2.7 最大重复子数组](#2.7)
@@ -32,11 +33,14 @@
 ### [3.8 Object.create()](#3.8)
 ### [3.9 Object.keys/Object.values/Object.entries](#3.9)
 ### [3.10 setTimeout 与 setInterval](#3.10)
+### [3.11 跨域](#3.11)
+### [3.12 函数柯里化](#3.12)
+### [3.13 高阶函数](#3.13)
 ## [四、正则表达式篇](#4)
-### [4.1 电话号码](#4.1)
-### [4.2 身份证](#4.2)
-### [4.3 网址](#4.3)
-### [4.4 邮箱](#4.4)
+### [4.1 断言](#4.1)
+### [4.2 分组](#4.2)
+### [4.3 非贪婪](#4.3)
+### [4.4 电话号码/身份证/网址/邮箱](#4.4)
 ## [五、js和html效果篇](#5)
 ### [5.1 获取高度和宽度](#5.1)
 ### [5.2 拖拽](#5.2)
@@ -143,7 +147,7 @@
                 }
 
 
-<h3 id='1.2'>1.3 平台</h3>
+<h3 id='1.3'>1.3 平台</h3>
         
 #### 1) window
 > - 需要区分不同的平台
@@ -253,6 +257,33 @@
                     return arr;
                 }
 
+                    
+<h3 id='2.4'>2.4 数组乱序</h3>
+        
+                shuffle = function(arr) {
+                    let temp = 0;
+                    let l = arr.length;
+                    let r = 0;
+                    for (let i = 0; i<l; i++) {
+                        r = Math.floor(Math.random() * (i + 1));
+                        temp = arr[r];
+                        arr[r] = arr[i];
+                        arr[i] = temp;
+                    }
+                }
+                arr = [1,2,3,4,5,6];
+
+                shuffle(arr);
+                //[1, 4, 3, 5, 2, 6]
+
+
+                        
+<h3 id='2.8'>2.8 ajax封装</h3>
+        
+        
+#### 1) 功能
+> - 
+> - 
 
 <h3 id='2.9'>2.9 String.format</h3>
         
@@ -271,6 +302,18 @@
 
                 let str = "${a}ads${a}sad${b}as${c}zx${c}";
                 str.iFormat({a: ' I ', b: ' love ', c: ' you '}); //" I ads I sad love as you zx you "
+#### 2) 一个更加简介的办法：利用replace()
+> - 第二个参数可以是函数，将每匹配到的一组分组就执行一次
+                
+                String.prototype.iFormat = function(transfer)   {
+                    return this.replace(/\$\{.+?\}/g, function(group){
+                        return transfer[group.replace(/(^\$\{)|(\}$)/g, '')];
+                    })
+                }
+
+                let str = "${a}ads${a}sad${b}as${c}zx${c}";
+                str.iFormat({a: ' I ', b: ' love ', c: ' you '});
+                // " I ads I sad love as you zx you "
 
 
 <h2 id='3'>三、原理实现篇</h2>
@@ -1139,6 +1182,7 @@
 
 #### 7) 组合继承优化2
 > - 目前来讲比较完美的方法
+> - 使用寄生式组合继承
                 
                 // 父类
                 function Parent(age) {
@@ -1154,10 +1198,8 @@
                     Parent.call(this, age);
                     this.sex = sex;
                 }
-                Child.prototype = deepCopy(Parent.prototype);
+                Child.prototype = Object.create(Parent.prototype);
                 Child.prototype.constructor = Child;
-
-
 
 <h3 id='3.7'>3.7 new</h3>
                 
@@ -1262,8 +1304,215 @@
                 }
                 f(100, 1); // the shortest delayTime is 4.878787878787879 in chrome
                 f(1000, 1); // the shortest delayTime is  83.83883883883884 in chrome
+
+<h3 id='3.11'>3.11 跨域</h3>
                 
+#### 1) 通过document.domain跨域
+> - 在相同的域名下建立文件
+#### 2) 通过location.hash跨域
+> - 但是如果内嵌的页面不同源的话是无法拿到iframe的document的
+                
+                let src = 'https://www.baidu.com';
+                let msg = 'helloB'
+                function createIframe(src) {    
+                    let frag = document.createDocumentFragment();
+                    let ifm = document.createElement('iframe');
+                    ifm.src = src;
+                    ifm.style.display = 'none';
+                    frag.appendChild(ifm);
+                    document.body.appendChild(frag);
+                }
 
+                function checkHash() {
+                    return location.hash ? location.hash.slice(1) : '';
+                }
+                window.addEventListener("hashchange", function() {
+                    console.log('hash has been changed, now hash is', checkHash());
+                }, false);
 
+                createIframe(src + '#' + msg);
 
+                let i = document.getElementsByTagName('iframe')[ document.getElementsByTagName('iframe').length - 1];
+                let ifmScript = document.createElement('script');
+                ifmScript.innerHTML = ""
+                    +  "let hash = location.hash ? location.hash.slice(1) : '';\n"
+                    +  "let message = hash + 'helloA';\n"
+                    +  "try {\n"
+                    +  "  parent.location.hash = message;\n"
+                    +  "  console.log('OK, i am done, message = ', message);\n"
+                    +  "} catch (e) {\n"
+                    +  "  // ie、chrome的安全机制无法修改parent.location.hash，\n"
+                    +  "  // 所以要利用一个中间的cnblogs域下的代理iframe\n"
+                    +  "  var ifrproxy = document.createElement('iframe');\n"
+                    +  "  ifrproxy.style.display = 'none';\n"
+                    +  "  ifrproxy.src = 'http://ecma.bdimg.com/adtest/limukai/demo/test/cscript/cs3.html#' + message;  \n"
+                    +  "  // 注意该文件在a.com域下\n"
+                    +  "  document.body.appendChild(ifrproxy);\n"
+                    +  "  let i = document.getElementsByTagName('iframe')[ document.getElementsByTagName('iframe').length - 1];\n"
+                    +  "  let ifmScript = document.createElement('script');\n"
+                    +  "  ifmScript.innerHTML = 'parent.parent.location.hash = self.location.hash.substring(1);'\n"
+                    +  "  ifrproxy.appendChild(ifmScript);\n"
+                    + "}"
+                i.contentWindow.document.body.appendChild(ifmScript);
+#### 3) 通过postMessage
+> - 好像也做不了
+> - 需要判断源origin，否则容易收到XXR攻击
+                
+                let msgHandler = function(event) {
+                    console.log('event.data', event.data);
+                }
+                window.addEventListener('message', msgHandler, false);
+
+                let src = 'https://www.baidu.com';
+                let msg = 'helloB'
+                function createIframe(src) {    
+                    let frag = document.createDocumentFragment();
+                    let ifm = document.createElement('iframe');
+                    ifm.src = src;
+                    ifm.style.display = 'none';
+                    frag.appendChild(ifm);
+                    document.body.appendChild(frag);
+                }
+                createIframe(src + '#' + msg);
+
+                let i = document.getElementsByTagName('iframe')[ document.getElementsByTagName('iframe').length - 1];
+                let iframe = i.contentWindow;
+                iframe.postMessage('hello world', 'https://segmentfault.com/a/1190000012264815');
+#### 4) Jsonp
+> - 只支持GET，不支持POST请求
+> - 它只支持跨域HTTP请求这种情况，不能解决不同域的两个页面之间如何进行JavaScript调用的问题。
+> - 支持老版本的浏览器
+            
+            // 自己的页面
+            <script>
+                function exec(data) {
+                    console.log(data);
+                }
+            </script>
+            <script src="http://www.baidu.com?callback=exec"></script>
+
+            // 后端
+                1，判断callback的名称；
+                2，处理数据data
+                3，返回js文件里面写着： exec(data);
+#### 5) Access-Control-Allow-Origin
+> - 存在兼容性的问题，不兼容老版本的浏览器
+> - 服务器设置
+                
+                //指定允许其他域名访问
+                'Access-Control-Allow-Origin:http://172.20.0.206'//一般用法（*，指定域，动态设置，但不允许携带认证头和cookies
+                //是否允许后续请求携带认证信息（cookies）,该值只能是true,否则不返回
+                'Access-Control-Allow-Credentials:true'
+                //预检结果缓存时间
+                'Access-Control-Max-Age: 1800'
+                //允许的请求类型
+                'Access-Control-Allow-Methods:GET,POST,PUT,POST'
+                //允许的请求头字段
+                'Access-Control-Allow-Headers:x-requested-with,content-type'
+
+<h3 id='3.12'>3.12 函数柯里化</h3>
+                
+#### 1) 定义
+> - 一个函数接受一些参数后返回一个新的函数，这个新的函数继续接收剩余的参数
+> - 比如：
+                
+                // 原函数
+                function origin(a, b, c) {
+
+                }
+
+                // 柯里化
+                function curry(a) {
+                    return function(b, c) {
+
+                    }
+                }
+#### 2) 两段不定参数版本
+> - 
+                
+                function curry() {
+                    let args1 = [].slice.call(arguments);
+                    return function() {
+                        let args2 = [].slice.call(arguments);
+                        argus = args1.concat(args2);
+                        console.log(argus);
+                    }
+                }
+                curry(1)(2); //[1, 2]
+                curry(1,2)(2,3,4); //  [1, 2, 2, 3, 4]
+
+#### 3) 不定段不定参数版本
+> - 无限累加器
+> - points
+>> - 改写函数的toSting()和valueOf()方法
+>> - 返回的函数作为参数收集器
+>> - 真正做处理方法是toSting()和valueOf()方法
+                
+                function curry() {
+
+                    let args = [].slice.call(arguments);
+
+                    let _curry = function() { 
+                        let add = function() {
+                            args.push(...arguments) // 为了搜集参数
+                            return add;
+                        }
+
+                        add.toString = function() { // 输出结果
+                            return args.reduce((total, item) => {
+                                return total + item;
+                            })
+                        }
+                        return add;
+                    }
+
+                    return _curry(...args);
+                }
+
+                
+<h3 id='3.13'>3.13 高阶函数</h3>
+                
+#### 1) 定义
+> - 接受一个或多个函数作为输入
+> - 输出一个函数
+#### 2) 实现一个map函数
+> - 挂靠在Array数组原型上
+                
+                Array.prototype.myMap = function(func) {
+                    let l = this.length;
+                    let temp = [];
+                    for(let i = 0; i < l; i++) {
+                        temp[i] = func(this[i], i, this);
+                    }
+                    return temp;
+                }
+#### 3) 实现一个forEach函数
+> - 挂靠在Array数组原型上
+                
+                Array.prototype.myForEach = function(func) {
+                    let l = this.length;
+                    for(let i = 0; i < l; i++) {
+                        func(this[i], i, this);
+                    }
+                }
+#### 4) 实现一个reduce函数
+> - 挂靠在Array数组原型上
+                
+                Array.prototype.myReduce = function(func, init) {
+                    let l = this.length;
+                    let result = init ? init : 0;
+                    for(let i = 0; i < l; i++) {
+                        result = func(result, this[i], init);
+                    }
+                    return result;
+                }
+#### 5) 实现一个filter函数
+> - 挂靠在Array数组原型上               
+                
+                Array.prototype.myFilter = function(func) {
+                    let l = this.length;
+                    let arr = [];
+                    while(l--) if(func(this[l])) arr.unshift(this[l]);
+                    return arr;
+                }
 
