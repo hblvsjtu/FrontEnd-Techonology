@@ -21,6 +21,7 @@
 ### [2.7 最大重复子数组](#2.7)
 ### [2.8 ajax封装](#2.8)
 ### [2.9 String.format](#2.9)
+### [2.10 String.thousandSplit](#2.10)
 ## [三、原理实现篇](#3)
 ### [3.1 call/apply/bind](#3.1)
 ### [3.2 Deferred和Promise](#3.2)
@@ -57,9 +58,10 @@
 ### [6.4 清除浮动](#6.4)
 ### [6.5 消除幽灵空格](#6.5)
 ### [6.6 三列布局](#6.6)
-### [6.7 响应式布局](#6.7)
-### [6.8 变形动画](#6.8)
-### [6.9 补间动画](#6.9)
+### [6.7 弹性布局](#6.7)
+### [6.8 响应式布局](#6.8)
+### [6.9 变形动画](#6.9)
+### [6.10 补间动画](#6.10)
 ## [七、前端工程化和模块化篇](#7)
 ### [7.1 npm](#7.1)
 ### [7.2 Webpack](#7.2)
@@ -76,10 +78,13 @@
 ## [九、浏览器篇](#8)
 ### [9.1 访问一个链接发生的全过程](#9.1)
 ### [9.2 浏览器渲染过程](#9.2)
-### [9.3 IE的hack写法](#9.3)
-### [8.4 浏览器性能和计时器](#9.4)
-### [8.5 HTTP状态码](#9.5)
-### [8.6 常见的网络安全问题](#9.6)
+### [9.3 defer和ansys的区别](#9.3)
+### [9.4 IE的hack写法](#9.4)
+### [9.5 浏览器性能和计时器](#9.5)
+### [9.6 HTTP状态码](#9.6)
+### [9.7 常见的网络安全问题](#9.7)
+## [十、V8引擎篇](#10)
+### [10.0 事件循环](#10.1)
 
         
 ------      
@@ -334,6 +339,25 @@
                 str.iFormat({a: ' I ', b: ' love ', c: ' you '});
                 // " I ads I sad love as you zx you "
 
+
+<h3 id='2.10'>2.10 String.thousandSplit</h3>
+           
+#### 1) 功能
+> - 西方的数字从右往左每三位加一个分隔符
+#### 2) 实现
+> - 需要零宽正向预言
+> - $表示从右往左
+> - ，不能放在第一位
+> - 需要全局判断，因为不止匹配一个
+            
+            String.prototype.thousandSplit = function(tag) {
+                return this.replace(/(?<=\B)(?=(\d{3})+$)/g, tag);
+            }
+
+            '234123456'.thousandSplit(',');
+            // "234,123,456"
+            '1234123456'.thousandSplit('$');
+            // "1$234$123$456"
 
 <h2 id='3'>三、原理实现篇</h2>
 <h3 id='3.1'>3.1 call/apply/bind</h3>
@@ -1183,7 +1207,8 @@
                     this.sex = sex;
                 }
                 Child.prototype = Parent.prototype;
-                // Child.prototype.constructor = Child;
+                Child.prototype.constructor = Child;
+                
                 let child1 = new Child('male', 20);
                 console.log('child1.name = ', child1.name);
                 console.log('child1.friends = ', child1.friends);
@@ -1191,6 +1216,7 @@
                 console.log('p.name = ', p.name);
                 console.log('child1.name = ', child1.name);
                 console.log('child1.age = ', child1.age);
+                p instanceof Child;
 
 
                 // child1.name =  ["lvweiyaun"]
@@ -1198,6 +1224,7 @@
                 // p.name =  ["lvweiyaun"]
                 // child1.name =  ["lvweiyaun"]
                 // child1.age =  20
+                // true
 
 #### 7) 组合继承优化2
 > - 目前来讲比较完美的方法
@@ -1206,6 +1233,7 @@
                 // 父类
                 function Parent(age) {
                     this.age = age;
+                    this.friends = ['a', 'b'];
                 }
                 Parent.prototype.name = ['lvweiyaun'];
                 Parent.prototype.tellName = function() {
@@ -1219,6 +1247,22 @@
                 }
                 Child.prototype = Object.create(Parent.prototype);
                 Child.prototype.constructor = Child;
+
+                let child1 = new Child('male', 20);
+                console.log('child1.name = ', child1.name);
+                console.log('child1.friends = ', child1.friends);
+                let p = new Parent(55);
+                console.log('p.name = ', p.name);
+                console.log('child1.name = ', child1.name);
+                console.log('child1.age = ', child1.age);
+                p instanceof Child;
+
+                // child1.name =  ["lvweiyaun"]
+                // child1.friends =  ["a", "b"]
+                // p.name =  ["lvweiyaun"]
+                // child1.name =  ["lvweiyaun"]
+                // child1.age =  20
+                // false
 
 <h3 id='3.7'>3.7 new</h3>
                 
@@ -1591,4 +1635,473 @@
                 
                 /^[a-zA-Z0-9]+@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}$/.test('supersteelsoul@163.com'); // true
 
+        
+------      
+        
+<h2 id='6'>六、CSS效果篇</h2>
+<h3 id='6.1'>6.1 水平居中</h3>
 
+        
+#### 1) 行内元素
+> - 父元素上text-align: center;
+                
+                // main.html
+                <div class="contain">
+                    <span class="centerText">我是居中的行内元素</span>
+                </div>
+
+                // main.css
+                .contain {
+                    text-align: center;
+                    background: #000;
+                }
+
+                 .centerText {
+                    background: #fff;
+                }
+#### 2) 块级元素
+> - 定宽居中
+>> - 自身元素上margin: auto; 一定要写width;
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    background: #000;
+                }
+
+                .centerBlock {
+                    width: 100px;
+                    margin: auto;
+                    background: #fff;
+                } 
+> - inline-block不定宽居中
+>> - 把块状元素的显示值设置为inline-block
+>> - 然后使用行内元素的text-align: center;
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    text-align: center;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    background: #fff;
+                }
+> - 绝对定位不定宽居中
+>> - 注意IE8及以下不支持transform，其他的也需要加后缀
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    position: relative;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #fff;
+                }
+> - table-cell不定宽居中
+>> - 注意table-cell的特性有点像inline-block，需要设置width，而且不接受百分比，只接受数值，table-cell
+>> - IE6 IE7无效
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    display: table-cell;
+                    width: 400px;
+                    text-align: center;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    background: #fff;
+                } 
+<h3 id='6.2'>6.2 垂直居中</h3>
+
+        
+#### 1) 行内元素
+> - 父元素需要设置行高
+> - 自身元素上设置vertical-align
+                
+                // main.html
+                <div class="contain">
+                    <span class="centerText">我是居中的行内元素</span>
+                </div>
+
+                // main.css
+                .contain {
+                    line-height: 400px;
+                    vertical-align: middle;
+                    background: #000;
+                }
+
+                 .centerText {
+                    background: #fff;
+                }
+#### 2) 块级元素
+> - line-height不定高居中
+>> - 父元素需要设置行高，高度将被行高顶起，相当于设了高度
+>> - 子元素设置vertical-align: middle，这是因为子元素被设为inline-block后，其基线将于内部文字的中线重合
+>> - 由于父元素的行高等于自身高度，而子元素的基线在内部文字的中线上，所以就变成竖直居中了
+>> - 会存在幽灵空白节点的问题，详细看[6.5 消除幽灵空格](#6.5)
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    line-height: 100px;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    line-height: 1;
+                    vertical-align: middle; 
+                    background: #fff;
+                }
+
+> - 绝对定位不定高居中
+>> - 注意IE8及以下不支持transform，其他的也需要加后缀
+>> - 父元素需要设置高度
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    position: relative;
+                    height: 100px;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: #fff;
+                }
+> - table-cell不定高居中
+>> - 注意table-cell的特性有点像inline-block
+>> - 父元素需要设置计算值为table-cell，vertical-align: middle，高度不接受百分比，只接受数值，margin设置无效，响应padding设置
+>> - 不同于水平居中，子元素不必一定是inline-block，高度会自动适应
+>> - IE6 IE7无效
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    display: table-cell;
+                    height: 400px;
+                    vertical-align: middle;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    background: #fff;
+                } 
+
+            
+<h3 id='6.3'>6.3 水平垂直居中</h3>
+
+        
+#### 1) 绝对定位auto方案
+> - 需要已知长度和高度
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    position: relative;
+                    width: 100px;
+                    height: 100px;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 40px;
+                    height: 40px;
+                    margin: auto;
+                    background: #fff;
+                }
+
+#### 2) 绝对定位translate方案
+> - 不需要已知长度和高度
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    position: relative;
+                    width: 100px;
+                    height: 100px;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: #fff;
+                }
+
+#### 3) inline-block方案
+> - vertical-align and text-align
+> - 如果子元素内部有多行文字，且没有设vertical-align: middle;那么竖直方向上第一行会往上跳，居中对齐的是最后一行中间。
+> - 会存在幽灵空白节点的问题，详细看[6.5 消除幽灵空格](#6.5)
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    width: 100px;
+                    line-height: 100px;
+                    text-align: center;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    line-height: 1;
+                    vertical-align: middle;
+                    background: #fff;
+                }
+
+#### 4) table-cell方案
+> - 不需要理会行高的问题，只用text-align和vertical-align就能保证
+> - 自身元素计算值设为inline-block
+                
+                // main.html
+                <div class="contain">
+                    <div class="centerBlock">我是居中的块级元素</div>
+                </div>
+
+                // main.css
+                .contain {
+                    display: table-cell;
+                    width: 100px;
+                    height: 100px;
+                    text-align: center;
+                    vertical-align: middle;
+                    background: #000;
+                }
+
+                .centerBlock {
+                    display: inline-block;
+                    background: #fff;
+                }
+     
+        
+<h3 id='6.4'>6.4 清除浮动</h3>
+
+        
+#### 1) 原因
+> - 对于块级元素，当其高度没有被指定的时候，其高度由内部的存在于文档流中的元素的高度所决定。但是，问题来了，如果内部的某个元素由于浮动或者绝对定位等原因脱离了文档流，但么块级元素的高度可能会发生变化(变小)，严重的可能会引起高度坍塌。
+> - [浮动元素会脱离文档流但不会脱离文本流，因而会造成文本环绕效果，而这也是浮动的本意。](https://segmentfault.com/a/1190000007030144)
+> - [浮动元素的外边距不会合并](https://segmentfault.com/a/1190000007030144)
+> - [浮动非替换元素时必须设定宽度](https://segmentfault.com/a/1190000007030144)
+> - [浮动元素会脱离文档流但不会脱离文本流，因而会造成文本环绕效果，而这也是浮动的本意。](https://segmentfault.com/a/1190000007030144)
+> - [不管是块级元素还是内联元素，一旦浮动就会变成行内块元素（即display: inline-block;）](https://segmentfault.com/a/1190000007030144)
+> - [如果浮动元素应用了负外边距而导致其与相邻元素重叠，分两种情况：](https://segmentfault.com/a/1190000007030144)
+>> - [行内框与一个浮动元素重叠时，其边框、背景和内容都在该浮动元素之上显示](https://segmentfault.com/a/1190000007030144)
+>> - [块框与一个浮动元素重叠时，其边框和背景都在该浮动元素之下显示，而内容在浮动元素之上显示](https://segmentfault.com/a/1190000007030144)
+#### 2) 解决办法
+> - BFC block-formatting context 块级格式化上下文
+> - BFC有一个特性：内部元素无论怎么'折腾'，都不会干扰外部的元素。这意味着不会发生margin重叠，也不会发生高度坍塌。
+>> - html根元素
+>> - float的值不为none；
+>> - position的值不为relative和static
+>> - overflow为auto，scroll，hidden
+>> - display的值为table-cell、table-caption和inline-block
+>>>>> ![图6-1 清除浮动]()
+                
+                // main.html
+                <div class="contain">
+                    <div class="floatBlock">我是正常元素</div>
+                </div>
+
+                <div class="contain">
+                    <div class="floatBlock">我是浮动元素造成了坍塌</div>
+                </div>
+
+                <div class="contain">
+                    <div class="floatBlock">我是浮动元素经过了overflow：hidden修复</div>
+                </div>
+
+                <div class="contain">
+                    <div class="floatBlock">我是浮动元素经过了父元素inline-block修复</div>
+                </div>
+
+                <div class="contain">
+                    <div class="floatBlock">我是浮动元素经过了父元素clear:both修复</div>
+                </div>
+
+                <div class="contain">
+                    <div class="floatBlock">我是浮动元素经过了父元素absolute修复</div>
+                </div>
+
+                // main.css
+                .contain {
+                    width: 400px;
+                    background: #000;
+                }
+
+                .floatBlock {
+                    display: inline-block;
+                    width: 200px;
+                    margin: 10px;
+                    height: 50px;
+                    background: #fff;
+                }
+
+                .contain:nth-child(2) .floatBlock,
+                .contain:nth-child(3) .floatBlock,
+                .contain:nth-child(4) .floatBlock,
+                .contain:nth-child(5) .floatBlock,
+                .contain:nth-child(6) .floatBlock {
+                    float: left;
+                }
+
+                .contain:nth-child(3){
+                    overflow: hidden;
+                }
+
+                .contain:nth-child(4) {
+                    display: inline-block;
+                }
+
+                .contain:nth-child(5) {
+                    zoom: 1;
+                }
+                .contain:nth-child(5)::after {
+                    content: '';
+                    display: block;
+                    height: 0;
+                    visibility: hidden;
+                    clear: both;
+                }
+
+                .contain:nth-child(6) {
+                    position: absolute;
+                }
+
+        
+<h3 id='6.5'>6.5 幽灵空白节点</h3>
+
+        
+#### 1) W3C规范
+> - line boxes are created as needed to hold inline-level content within an inline formatting context. Line boxes that contain no text, no preserved white space, no inline elements with non-zero margins, padding, or borders, and no other in-flow content (such as images, inline blocks or inline tables), and do not end with a preserved newline must be treated as zero-height line boxes for the purposes of determining the positions of any elements inside of them, and must be treated as not existing for any other purpose.
+> - 如果一个line box里没有文字、保留的空格、非0的margin或padding或border的inline元素、或其他in-flow内容（比如图片、inline-block或inline-table元素），且不以保留的换行符结束的话，就会被视作高度为0的line box。但是一旦出现以上任意一种情况，就会出现幽灵空白节点。说白点，行框里只要有in-flow（图片、inline-block或inline-table元素），就会出现幽灵空白节点
+> - 在一个行框内，对于一个inline-block，如果内部没有文字，或者overflow不是visible，那么他的基线将在于margin底部，如果里面有文字，将于最后一行文字的基线对齐
+#### 2) 如何消除呢？
+> - 设置父元素font-size为0，然后再把子元素的font-size恢复
+        
+<h3 id='6.6'>6.6 三列布局</h3>
+
+        
+#### 1) null
+> - 
+
+                
+<h3 id='6.7'>6.7 弹性布局</h3>
+
+        
+#### 1) null
+> -
+        
+<h3 id='6.8'>6.8 响应式布局</h3>
+
+        
+#### 1) null
+> -
+        
+
+<h3 id='6.9'>6.9 变形动画</h3>
+
+        
+#### 1) null
+> -
+            
+<h3 id='6.10'>6.10 补间动画</h3>
+
+        
+#### 1) null
+> - 
+
+        
+------      
+        
+<h2 id='9'>九、浏览器篇</h2>
+<h3 id='9.3'>9.3 defer和async的区别</h3>
+
+        
+#### 1) 相同点
+> - 都用在script的异步脚本加载中，
+#### 2) 不同点
+> - 脚本的执行时间和执行顺序
+> - async的脚本是看那个脚本最先下载完成先执行，跟写在HTML上的顺序是不同的
+> - defer实在DOM解析完成后，DOMContentLoaded 事件触发之前完成的，一般是按照写在HTML上的顺序执行，但是实际体验下来这个顺序不能保证
+>>>>>> ![图9-1 async和defer的区别]()
+        
+------      
+        
+<h2 id='10'>十、V8引擎篇</h2>
+<h3 id='10.0'>10.0 事件循环</h3>
+
+        
+#### 1) 主线程
+> - JS异步单线程里面的单线程指的是就是主线程，或者平常所说的『main』函数
+#### 2) 任务队列(Macrotasks)
+> - 当主线程在运作的时候，异步方法在指定的事件发生后，就会保存到一个队列中；当主线程在空闲时的时候，系统将会遍历该队列里面的方法并一一顺序执行。此队列就是'任务队列'。
+> - 比如dom事件、setTimeout、setInterval、ajax事件
+#### 3) 微任务队列(Microtasks)
+> - 就是在主线程和任务队列隔着的一层队列，当主线程空闲时，先遍历微任务队列并把里面的任务一一顺序执行，再遍历任务队列并一一顺序执行里面的方法。
+> - 如promise、process.nextTicks、MutationObserver
