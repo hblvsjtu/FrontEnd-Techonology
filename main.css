@@ -1,0 +1,67 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors ${冰红茶} (${hblvsjtu@163.com})
+ * @date    2019-07-31
+ * @version $0.0.1$
+ */
+
+body {
+	display: flex;
+	flex-flow: column wrap; 
+    min-width: 350px;
+    min-height: 500px;
+    height: 100%;
+}
+
+header,
+footer {
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+	flex: 0 0 100px;
+	background: gray;
+}
+
+header {
+	order: 1;
+}
+
+footer {
+	order: 3;
+}
+
+.container {
+	display: flex;
+	flex-flow: row nowrap;
+	order: 2;
+	flex: 1 1 auto;
+}
+
+.container main {
+	order: 2;
+	flex: 1 1 auto;
+	background: red;
+}
+
+.container nav {
+	order: 1;
+	flex: 0 0 200px;
+	background: yellow;
+}
+
+.container aside {
+	order: 3;
+	flex: 0 0 150px;
+	background: green;
+}
+
+.container main,
+.container nav,
+.container aside {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
