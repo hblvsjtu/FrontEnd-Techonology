@@ -6,7 +6,7 @@
     
 平常在生活中或者工作中不断的学习前端知识，记录和分享吾之所见吾之所悟^_ ^
 
-## 目录
+## [目录](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README.md)
 ## [三、原理实现篇](#3)
 ### [3.1 call/apply/bind](#3.1)
 ### [3.2 Deferred和Promise](#3.2)
