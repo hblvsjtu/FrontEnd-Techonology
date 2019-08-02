@@ -6,7 +6,7 @@
     
 平常在生活中或者工作中不断的学习前端知识，记录和分享吾之所见吾之所悟^_ ^
 
-## 目录
+## [目录](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README.md)
 ## [四、正则表达式篇](#4)
 ### [4.1 断言](#4.1)
 ### [4.2 分组](#4.2)
