@@ -42,7 +42,7 @@
 ### [4.3 非贪婪](#4.3)
 ### [4.4 电话号码/身份证/网址/邮箱](#4.4)
 ## [五、js和html效果篇](#5)
-### [5.1 获取高度和宽度](#5.1)
+### [5.1 获取元素样式/位置/尺寸](#5.1)
 ### [5.2 拖拽](#5.2)
 ### [5.3 图片懒加载](#5.3)
 ### [5.4 轮播](#5.4)
@@ -160,6 +160,13 @@
                 }
 #### 6) 全类型判断
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 function type(o) {
                     if(o === null) return "null";
                     else if(o !== o) return "NaN";
@@ -178,6 +185,13 @@
 > - IE6、7、8利用window == document为真 但是document == window为假的神奇特性
 > - 标准浏览器及IE9,IE10等使用鸭子辩型的方法
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 // IE6、7、8
                 function isWindow(obj) {
                     return obj == obj.document && obj.document != obj;
@@ -191,6 +205,13 @@
 > - 利用navigator.userAgent来判断
 > - 要把browsers数组里面的子项按照顺序来放，因为有时候userAgent里面会同时出现两种或以上的子项，当Safari出现的时候一般在userAgent的最后面，而"Chrome"次之，所以需要把他们放在前面先进行遍历
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 function myBrowser(){
                     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
                     // 此处要把
@@ -222,6 +243,13 @@
 > - 先对输入进行判断，是数组、对象还是其他
 > - 然后如果是数组或者对象的时候进行遍历，子元素是数组或者对象的时候直接赋值，否则进行递归
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 let deepCopy = function(obj) {
                     let o;
                     let type = Object.prototype.toString.call(obj);
@@ -252,6 +280,13 @@
 > - 有length属性
 > - length属性的值是一个非负有限整数
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 function isArrayLike(obj) {
                     return obj && (typeof obj === 'object') &&  (obj.length >= 0) &&  obj.length < 4294967296 && (obj.length === Math.floor(obj.length))
                 }
@@ -259,6 +294,13 @@
 > - 返回一个数组
 > - 循环赋值从0到length
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 //slice的内部实现
                 Array.prototype.slice = function(start,end){  
                       var result = new Array();  
@@ -274,6 +316,13 @@
 > - Array.from();
 > - 手动转化
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 function transfer(obj) {
                     let arr = [];
                     let l = obj.length;
@@ -284,6 +333,13 @@
                     
 <h3 id='2.4'>2.4 数组乱序</h3>
         
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 shuffle = function(arr) {
                     let temp = 0;
                     let l = arr.length;
@@ -318,6 +374,13 @@
 > - 参数是模板的数据
 > - 分别用两个正则表达式切割关键词和非关键词，然后在进行拼接
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 String.prototype.iFormat = function(data) {
                     let keyArray = this.match(/(?<=\$\{)\S+?(?=\})/g);
                     let strArray = this.split(/\$\{\S+?\}/g);
@@ -329,6 +392,13 @@
 #### 2) 一个更加简介的办法：利用replace()
 > - 第二个参数可以是函数，将每匹配到的一组分组就执行一次
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 String.prototype.iFormat = function(transfer)   {
                     return this.replace(/\$\{.+?\}/g, function(group){
                         return transfer[group.replace(/(^\$\{)|(\}$)/g, '')];
@@ -350,6 +420,13 @@
 > - ，不能放在第一位
 > - 需要全局判断，因为不止匹配一个
             
+            /**
+             * 
+             * @authors ${冰红茶} (${hblvsjtu@163.com})
+             * @date    2019-08-01
+             * @version $Id$
+             */
+
             String.prototype.thousandSplit = function(tag) {
                 return this.replace(/(?<=\B)(?=(\d{3})+$)/g, tag);
             }
@@ -359,6 +436,10 @@
             '1234123456'.thousandSplit('$');
             // "1$234$123$456"
 
+
+        
+------      
+        
 <h2 id='3'>三、原理实现篇</h2>
 <h3 id='3.1'>3.1 call/apply/bind</h3>
 
@@ -369,6 +450,13 @@
 > - 其他的形参作为原函数的参数
 > - 模拟的方法被绑定在函数的原型上，方便调用
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 Function.prototype.myCall = function(content) {
                     content.func = this; //转移this
                     let arr = [], l = arguments.length;
@@ -391,6 +479,13 @@
 #### 2) apply
 > - 根据call把参数改成数组输入的形式
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 Function.prototype.myApply = function(content) {
                     content.func = this; //转移this
                     return content.func(...arguments[1]);
@@ -412,6 +507,13 @@
 > - 如果bind的参数不足够原函数消化，剩余的参数可以在返回的函数中输入
 > - 作为原型挂靠在Function上
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 Function.prototype.myBind = function() {
                     let self = this;
                     let arr1 = Array.from(arguments);
@@ -453,6 +555,13 @@
 > - promise的then方法用来传递handlerQueue序列，handlerQueue是由每个then方法里面resolve和reject组成的handler集合
 > - Deferred的resolve和reject遍历handlerQueue序列里面的handler，如果返回的结果是一个promise，就的Deferred的promise更新为返回的结果，如果不是的话就将结果作为下次resolve的实参。注意的是每遍历一个元素都需要把handlerQueue去掉相应的handler
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 let promise = function() {
                     this.handlerQueue = [];
                 }
@@ -543,6 +652,12 @@
 > - 实现resolve和reject原型方法
 > - 如果返回值是空类型，则正常返回this作链式调用，如果返回值非空也非Promise类型，则作为参数传到下一个then，可惜这个我实现不了
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 let MyPromise = function(fn) {
                     this.status = 'unfulfilled';
                     this.fn = typeof fn === 'function' ? fn : function() {};
@@ -623,6 +738,13 @@
 > - all方法是返回一个promise，循环得到结果放到一个数组中，由于每个子项执行的时间不一致，只能新建计数器来统计then执行的次数，当计数器等于all的数组参数个数的时候才进行resolve的统一处理结果数组
 > - race方法是返回一个promise，遍历所有的promise数组，不需要搜集结果
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 // 定义状态常量
                 const PENDDING = 'pendding';
                 const FULFILLED = 'fulfilled';
@@ -923,6 +1045,7 @@
                                 ]
 > - 监听器列表：
                 
+                
                 let _listeners = {
                     type1: [
                             listener1,
@@ -942,6 +1065,14 @@
                 
                 
 #### 2) 代码
+                
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 let Listen = function() {
 
                 }
@@ -988,6 +1119,12 @@
 > - 用bounce对回调函数进行包装
 > - 注意setTimeout和的作用域：内部延迟执行的代码中的this永远指向window，但是回调函数本身的this可以指向其他，所以setTimeout需要先在全局进行定义。
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 let myTimer;
                 let deBounce = function(delayTime, callback) {
                     clearTimeout(myTimer);
@@ -1005,6 +1142,13 @@
 > - 立即执行，无需使用setTimeout
 > - 如果实际运行时间长度 > 设定的周期时间, 则运行回调，并且把当前时间戳设为旧时间戳；
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 let old = new Date();
                 let throttle = function(cycleTime, callback) {
                     let now = new Date();
@@ -1022,6 +1166,13 @@
 #### 5) 防抖动和截流合并
 > - 在截流里面把防抖动的函数写进去
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 let old = new Date();
                 let myTimer;
                 let bounceAndThrottle = function(cycleTime, delayTime, callback) {
@@ -1050,6 +1201,13 @@
 #### 2) 原型式继承
 > - 只能继承父构造函数的原型对象上的成员, 不能继承父构造函数的实例对象的成员
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 // 父类
                 function Parent(age) {
                     this.age = age;
@@ -1080,6 +1238,13 @@
 >> - 新实例无法向父类构造函数传参
 >> - 存在父类私有引用类型属性共享的问题
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+
                 // 父类
                 function Parent(age) {
                     this.age = age;
@@ -1114,6 +1279,12 @@
 > - 好处：可以得到父类的构造函数属性，向父类构造函数传参。
 > - 坏处：无法得到父类的原型属性
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 // 父类
                 function Parent(age) {
                     this.age = age;
@@ -1152,6 +1323,12 @@
 > - 解决了对象共享的问题，还能拿到父类的构造函数
 > - 但是存在性能问题，因为父类有两次构造
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 // 父类
                 function Parent(age) {
                     this.age = age;
@@ -1191,6 +1368,12 @@
 > - 不存在性能问题
 > - 但是子类无法修改原型的constructor属性，因为一旦修改就会同时修改父类的constructor属性，换句话说无法辨别子类的构造函数是谁
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 // 父类
                 function Parent(age) {
                     this.age = age;
@@ -1493,6 +1676,12 @@
 #### 2) 两段不定参数版本
 > - 
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 function curry() {
                     let args1 = [].slice.call(arguments);
                     return function() {
@@ -1511,6 +1700,12 @@
 >> - 返回的函数作为参数收集器
 >> - 真正做处理方法是toSting()和valueOf()方法
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 function curry() {
 
                     let args = [].slice.call(arguments);
@@ -1541,6 +1736,12 @@
 #### 2) 实现一个map函数
 > - 挂靠在Array数组原型上
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 Array.prototype.myMap = function(func) {
                     let l = this.length;
                     let temp = [];
@@ -1552,6 +1753,12 @@
 #### 3) 实现一个forEach函数
 > - 挂靠在Array数组原型上
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 Array.prototype.myForEach = function(func) {
                     let l = this.length;
                     for(let i = 0; i < l; i++) {
@@ -1561,6 +1768,12 @@
 #### 4) 实现一个reduce函数
 > - 挂靠在Array数组原型上
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 Array.prototype.myReduce = function(func, init) {
                     let l = this.length;
                     let result = init ? init : 0;
@@ -1572,6 +1785,12 @@
 #### 5) 实现一个filter函数
 > - 挂靠在Array数组原型上               
                 
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
                 Array.prototype.myFilter = function(func) {
                     let l = this.length;
                     let arr = [];
@@ -1580,6 +1799,9 @@
                 }
 
 
+        
+------      
+        
 <h2 id='4'>四、正则表达式</h2>
 <h3 id='4.1'>4.1 断言</h3>
             
@@ -1635,6 +1857,314 @@
                 
                 /^[a-zA-Z0-9]+@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}$/.test('supersteelsoul@163.com'); // true
 
+
+        
+------      
+        
+<h2 id='6'>五、js和html效果篇</h2>
+<h3 id='6.1'>5.1 获取元素样式/位置/尺寸</h3>
+
+        
+#### 1) 样式
+> - element.getAttribute()方法 只能获取内联样式的内容
+                
+                var btn=element.getAttribute('style');
+> - document.styleSheets 获取内嵌样式表或外联样式表，返回值是一个数组
+                
+                var styleSheetList = document.styleSheets;
+                var styleSheet = styleSheetList[0];
+                var cssRuleList = styleSheet.rules;
+                var cssStyleRule = cssRuleList[0];
+                var styleDecl = cssStyleRule.style;
+                console.log(styleDecl.width);
+> - class属性的操作
+>> - className
+>> - classList 兼容性问题。如果该类名不存在则会在元素中添加类名，并返回 true。 第二个是可选参数，是个布尔值用于设置元素是否强制添加或移除类，不管该类名是否存在.注意： Internet Explorer 或 Opera 12 及其更早版本不支持第二个参数。
+                
+                //元素名.className 需要操作字符串,每个类中间用空格隔开
+                var className = ele.className;
+                className.replace('classNameA', '').replace(/\s+/g, ' ');
+                className.concat(' classNameB').replace(/\s+/g, ' ');
+                
+                //classList属性(浏览器兼容问题)：获取多个类选择器叠加的用法
+                //元素名.classList
+                var classList = ele.classList;
+                classList.add('className');
+                classList.remove('className');
+                classList.contains(class)
+                classList.toggle(class, true|false) // 第一个参数为要在元素中移除的类名，并返回 false。
+
+>> - 自定义类解决兼容性问题，可以兼容IE7
+                
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+                Object.prototype.myClassList = function() {
+                    var self = this;
+                    return {
+                        list: self.className,
+                        add: function(className) {
+                            self.className = self.className.concat(' ' + className);
+                        },
+                        remove: function(className) {
+                            self.className = self.className.replace(className, '');
+                        },
+                        contains: function(className) {
+                            return self.className.split(/\s+/g).indexOf(className) > -1;
+                        },
+                        toggle: function(className) {
+                            if(self.myClassList().contains(className)) {
+                                self.myClassList().remove(className);
+                            }
+                            else {
+                                self.myClassList().add(className);
+                            }
+                        }
+                    }
+                }
+
+                //
+                > div.listClass().list;
+                < "s_tab"
+                > div.listClass().add('asd');
+                < undefined
+                > div.listClass().list;
+                < "s_tab asd"
+                > div.listClass().remove('asd');
+                < undefined
+                > div.listClass().list;
+                < "s_tab "
+                > div.listClass().contains('asd');
+                < false
+                > div.listClass().contains('s_tab');
+                < true
+                > div.listClass().contains('s_ta');
+                < false
+                > div.listClass().toggle('s_ta');
+                < undefined
+                > div.listClass().contains('s_ta');
+                < true
+                > div.listClass().list;
+                < "s_tab  s_ta" 
+> - 获取实时计算的样式 getComputedStyle
+>> - 只读的，不能写。
+>> - 获取的是最终应用在元素上的所有CSS属性对象
+>> - currentStyle不能读取伪类，但是getComputedStyle可以
+>> - currentStyle是IE自娱自乐的玩意
+>> - 在访问例如background-color类似格式的css属性时
+                
+                window.getComputedStyle(ele,null).background-color //就不可以了，需要使用
+                window.getComputedStyle(ele,null).backgroundColor //可以
+                window.getComputedStyle(ele,null).getPropertyValue(“background-color”) // 可以
+                
+                var style = window.getComputedStyle("元素", "伪类");
+                ele.currentStyle[attr]
+
+                // 兼容性写法 如果遇到text的时候会报错，这里return null可以吃掉报错
+                /**
+                  * 
+                  * @authors ${冰红茶} (${hblvsjtu@163.com})
+                  * @date    2019-08-01
+                  * @version $Id$
+                  */
+
+                Object.prototype.getMyStyle = function(attr, pseudoElt) {
+                    let style = '';
+                    try {
+                        if(this.currentStyle) {
+                            style = this.currentStyle[attr];
+                        }
+                        else {
+                            style = window.getComputedStyle(this, pseudoElt)[attr];
+                        }
+                    }
+                    catch (e) {
+                        return null;
+                    }
+                    return style;
+                }
+
+                // ie7可能会返回auto值而不是实际的值
+
+#### 2) 位置
+> - 元素的位置
+>> - getClientRects 返回一个数组，但是该数组只有一个元素，而且是一个对象元素
+>> - getBoundingClientRect用于获取元素相对与浏览器视口的位置，它是一个对象
+>> - getClientRects和getClientRects都是元素边内界边缘相对于浏览器视口的距离
+>> - 想要获取元素边内界边缘相对于文档顶部的距离，需要用到offsetTop,offsetLeft和offsetParent
+                
+                getBoundingClientRect： {
+                        top: '元素顶部相对于视口顶部的距离',
+                        bottom: '元素底部相对于视口顶部的距离',
+                        left: '元素左边相对于视口左边的距离',
+                        right: '元素右边相对于视口左边的距离',
+                        height: '元素高度',
+                        width: '元素宽度'
+                        x: 8,
+                        y: 8,
+                    }
+>> - 兼容性写法 因为IE没有height和width
+                
+                // 兼容写法
+                 /**
+                  * 
+                  * @authors ${冰红茶} (${hblvsjtu@163.com})
+                  * @date    2019-08-01
+                  * @version $Id$
+                  */
+
+                  Object.prototype.getMyRect = function (isToHtml) {
+                     var o = this.getBoundingClientRect();
+                     var self = this;
+                     var offset = function(ele) {
+                        var parent = ele.offsetParent;
+                        return {
+                            top: isToHtml && parent.offsetParent? ele.offsetTop + offset(parent).top :  ele.offsetTop, 
+                            left: isToHtml && parent.offsetParent ? ele.offsetLeft + offset(parent).left :  ele.offsetLeft
+                        }
+                     }
+                     return {
+                         viewTop: o.top, // 获取元素内边距边缘离视窗的距离
+                         viewBottom: o.bottom, // 获取元素内边距边缘离视窗的距离
+                         viewLeft: o.left, // 获取元素内边距边缘离视窗的距离
+                         viewRight: o.right, // 获取元素内边距边缘离视窗的距离
+                         height: o.height || o.bottom - o.top, // 获取元素上下内边缘高度，不包括边距
+                         width: o.width || o.right - o.left, // 获取元素上下内边缘宽度，不包括边距
+                            offsetTop: offset(self).top, //获取元素内边缘距离定位父元素的距离
+                            offsetLeft: offset(self).left //获取元素内边缘距离定位父元素的距离
+                     }
+                 }
+>> - 一个例子
+                
+                // main.html
+                <div class="contain">
+                    <div class="camera">
+                        <div class="cube"></div>
+                    </div>
+                </div>
+
+                // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+
+                .contain {
+                    position: relative;
+                    top: 100px;
+                    left: 100px;
+                    height: 500px;
+                    width: 500px;
+                    overflow: scroll;
+                    background: yellow;
+                }
+
+                 .camera {
+                    position: absolute;
+                    top: 400px;
+                    left: 400px;
+                    width: 200px;
+                    height: 200px;
+                    background: red;
+                 }
+                 .camera .cube {
+                    width: 100px;
+                    height: 100px;
+                    margin: 50px;
+                    background: green;
+                 }
+
+                 let contain = document.getElementsByClassName('contain')[0];
+                 let camera = document.getElementsByClassName('camera')[0];
+                 let cube = document.getElementsByClassName('cube')[0];
+                 let camera = document.getElementsByClassName('camera')[0];
+
+>>>>>> ![图5-1 元素位置a](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE5-1%20%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AEa.png?raw=true)
+>>>>>> ![图5-1 元素位置b](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE5-1%20%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AEb.png?raw=true)
+>>>>>> ![图5-1 元素位置c](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE5-1%20%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AEc.png?raw=true)
+>>>>>> ![图5-1 元素位置d](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE5-1%20%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AEd.png?raw=true)
+            
+> - 滚动条滚动的距离
+>> - 所有主流浏览器都支持 pageXOffset 和 pageYOffset 属性。注意： IE 8 及 更早 IE版本不支持该属性,但可以使用"document.body.scrollLeft" 和 "document.body.scrollTop" 属性 。
+>> - chrome可以使用document.documentElement.scrollLeft和document.documentElement.scrollTop,或者window.pageXoffset与window.pageYoffset。
+>> - 不管怎样，document.documentElement.scrollTop和document.body.scrollTop只有一个有效，另外一个为0，我们可以利用这一个特点写兼容性
+>> - chrome里面的document.body.scrollHeight和document.body.scrollWidth偏小，而document.documentElement.scrollHeight和document.documentElement.scrollWidth正常，且IE也能用，所以就使用document.documentElement.scrollHeight和document.documentElement.scrollWidth吧
+> - 视窗高度和宽度
+>> - 视窗高度window.innerHeight
+>> - 视窗宽度window.innerWidth
+> - 元素内边距边缘距离文档顶部的距离
+>> - offsetTop 和 offsetLeft 都是相对于其内边距边界的。
+>> - HTMLElement.offsetParent 是一个只读属性，返回一个指向最近的定位父元素。如果没有定位的元素，则指向最近的 table 元素或根元素（标准模式下为 html；quirks 模式下为 body）。当元素的 style.display 设置为 "none" 时，offsetParent 返回 null。
+                
+
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-08-01
+                 * @version $Id$
+                 */
+                // 兼容性写法
+                window.getWindowSize = function (doc) {
+                    let myDocument = doc || document;
+                    return {
+                        scrollTop: myDocument.documentElement.scrollTop || myDocument.body.scrollTop,
+                        scrollLeft: myDocument.documentElement.scrollLeft || myDocument.body.scrollLeft,
+                        wholeHeight: myDocument.documentElement.scrollHeight,
+                        wholeWidth: myDocument.documentElement.scrollWidth,
+                        innerHeight: window.innerHeight,
+                        innerWidth: window.innerWidth,
+                        outerHeight: window.outerHeight,
+                        outerWidth: window.outerWidth
+                    }
+                }
+
+<h3 id='5.2'>5.2 拖拽</h3>
+
+        
+#### 1) 行内元素
+> - 
+<h3 id='5.3'>5.3 图片懒加载</h3>
+
+        
+#### 1) 行内元素
+> - 
+<h3 id='5.4'>5.4 轮播</h3>
+
+        
+#### 1) 行内元素
+> - 
+<h3 id='5.5'>5.5 滑动</h3>
+
+        
+#### 1) 行内元素
+> - 
+<h3 id='5.6'>5.6 级联</h3>
+
+        
+#### 1) 行内元素
+> - 
+<h3 id='5.7'>5.7 图片剪裁</h3>
+
+        
+#### 1) 行内元素
+> - 
+<h3 id='5.8'>5.8 图片压缩</h3>
+
+        
+#### 1) 行内元素
+> - 
+<h3 id='5.9'>5.9 Tab</h3>
+
+        
+#### 1) 行内元素
+> - 
+
         
 ------      
         
@@ -1651,6 +2181,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     text-align: center;
                     background: #000;
@@ -1669,6 +2207,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     background: #000;
                 }
@@ -1688,6 +2234,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     text-align: center;
                     background: #000;
@@ -1706,6 +2260,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     position: relative;
                     background: #000;
@@ -1728,6 +2290,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     display: table-cell;
                     width: 400px;
@@ -1739,6 +2309,8 @@
                     display: inline-block;
                     background: #fff;
                 } 
+
+
 <h3 id='6.2'>6.2 垂直居中</h3>
 
         
@@ -1752,6 +2324,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     line-height: 400px;
                     vertical-align: middle;
@@ -1774,6 +2354,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     line-height: 100px;
                     background: #000;
@@ -1796,6 +2384,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     position: relative;
                     height: 100px;
@@ -1821,6 +2417,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     display: table-cell;
                     height: 400px;
@@ -1845,6 +2449,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     position: relative;
                     width: 100px;
@@ -1874,6 +2486,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     position: relative;
                     width: 100px;
@@ -1925,6 +2545,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     display: table-cell;
                     width: 100px;
@@ -1961,7 +2589,7 @@
 >> - position的值不为relative和static
 >> - overflow为auto，scroll，hidden
 >> - display的值为table-cell、table-caption和inline-block
->>>>> ![图6-1 清除浮动]()
+>>>>> ![图6-1 清除浮动](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE6-1%20%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8.png?raw=true)
                 
                 // main.html
                 <div class="contain">
@@ -1989,6 +2617,14 @@
                 </div>
 
                 // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
                 .contain {
                     width: 400px;
                     background: #000;
@@ -2047,16 +2683,450 @@
 <h3 id='6.6'>6.6 三列布局</h3>
 
         
-#### 1) null
-> - 
-
+#### 1) 双飞翼布局
+> - 两侧宽度固定，中间宽度自适应
+> - 中间的dom优先渲染
+> - 允许三列中任意一列成为最高列
+> - 额外使用了一个div标签，该div是用来取得内层center的宽度了，避免计算calc(100%-350px)
+> - margin-left: -100%; //使得左栏放到上一行的最左边
+> - margin-left: -右栏宽度; //使得右栏放到上一行的最右边
+> - 为了避免中间栏被挤掉，需要设置body的最小宽度
                 
+                // main.html
+                <div class="container column">
+                    <div class="center"></div>
+                </div>
+                <div class="left column"></div>
+                <div class="right column"></div>
+
+                // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
+                body {
+                    min-width: 500px;
+                }
+
+                .column {
+                  float: left;
+                  height: 100px;
+                }
+
+                .container {
+                  width: 100%;
+                }
+
+                .container .center {
+                  height: 100%;
+                  margin-left: 200px;
+                  margin-right: 150px;
+                  background: red;
+                }
+
+                .left {
+                  width: 200px;
+                  margin-left: -100%;
+                  background: yellow; 
+                }
+
+                .right {
+                  width: 150px;
+                  margin-left: -150px;
+                  background: green; 
+                }
+
+> - 不用div包裹内部center的版本 目前需要计算计算calc(100%-350px)，calc()支持到IE9。
+                
+                // main.html
+                <div class="center column"></div>
+                <div class="left column"></div>
+                <div class="right column"></div>
+
+                // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
+                body {
+                    min-width: 350px; // 200px + 150px
+                }
+
+                .column {
+                    float: left;
+                    height: 100px;
+                }
+
+                .center {
+                    width: calc(100% - 200px - 150px);
+                    margin-left: 200px;
+                    margin-right: 150px;
+                    background: red;
+                }
+
+                .left {
+                    width: 200px;
+                    margin-left: -100%;
+                    background: yellow; 
+                }
+
+                .right {
+                    width: 150px;
+                    margin-left: -150px;
+                    background: green; 
+                }
+                
+
+#### 2) 圣杯布局
+> - 多一个div作为container
+> - container的左右padding为左右栏留出空位
+> - 左右栏使用relative作平移补偿
+    
+
+                // main.html
+                <div class="container">
+                    <div class="center column"></div>
+                    <div class="left column"></div>
+                    <div class="right column"></div>
+                </div>
+
+                // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+                 
+                body {
+                    min-width: 550px; // 200px+150px+200px
+                }
+
+                .container {
+                    padding-left: 200px;
+                    padding-right: 150px;
+                    height: 100px;
+                }
+
+                .column {
+                    float: left;
+                    height: 100%;
+                }
+
+                .center {
+                    width: 100%;
+                    background: red;
+                }
+
+                .left {
+                    position: relative;
+                    left: -200px;
+                    width: 200px;
+                    margin-left: -100%;
+                    background: yellow; 
+                }
+
+                .right {
+                    position: relative;
+                    right: -150px;
+                    width: 150px;
+                    margin-left: -150px;
+                    background: green; 
+                }
+
+#### 3) 简单float布局
+> - 左右分别来一个float，中间用margin撑开
+> - center只能放在下面，否则会挤掉left和right
+> - 缺点：center最后才渲染，而且center的文字流会收到left和right的影响
+                
+                // main.html
+                <div class="left"></div>
+                <div class="right"></div>
+                <div class="center"></div>
+
+                // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+
+                body {
+                    min-width: 350px;
+                }
+
+                .center {
+                    height: 100px;
+                    margin-left: 200px;
+                    margin-right: 150px;
+                    background: red;
+                }
+
+                .left {
+                    float: left;
+                    width: 200px;
+                    height: 100px;
+                    background: yellow; 
+                }
+
+                .right {
+                    float: right;
+                    width: 150px;
+                    height: 100px;
+                    background: green; 
+                }
+#### 4) 绝对float布局
+> 多一个div作为包裹
+> 简单易用，兼容性好
+> 中间最先出
+                
+                // main.html
+                <div class="container">
+                    <div class="center"></div>
+                    <div class="left"></div>
+                    <div class="right"></div>
+                </div>
+
+                // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+
+                body {
+                    min-width: 350px;
+                }
+
+                .container {
+                    position: relative;
+                    height: 100px;
+                    overflow: hidden;
+                }
+
+                .center {
+                    position: absolute;
+                    left: 200px;
+                    right: 150px;
+                    top: 0;
+                    bottom: 0;
+                    background: red;
+                }
+
+                .left {
+                    float: left;
+                    width: 200px;
+                    height: 100px;
+                    background: yellow; 
+                }
+
+                .right {
+                    float: right;
+                    width: 150px;
+                    height: 100px;
+                    background: green; 
+                }
+#### 5) 绝对布局
+> 多一个div作为包裹
+> 简单易用，兼容性好
+> 中间最先出
+                
+                // main.html
+                <div class="container">
+                    <div class="center"></div>
+                    <div class="left"></div>
+                    <div class="right"></div>
+                </div>
+
+                // main.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+
+                body {
+                    min-width: 350px;
+                }
+
+                .container {
+                    position: relative;
+                    height: 100px;
+                }
+
+                .center {
+                    position: absolute;
+                    left: 200px;
+                    right: 150px;
+                    top: 0;
+                    bottom: 0;
+                    background: red;
+                }
+
+                .left {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    float: left;
+                    width: 200px;
+                    background: yellow; 
+                }
+
+                .right {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 150px;
+                    background: green; 
+                }
+
 <h3 id='6.7'>6.7 弹性布局</h3>
 
-        
-#### 1) null
-> -
-        
+      
+#### 1) 容器
+> - display: flex;    // 将块级元素设置为容器
+> - display: inline-flex    // 将行内元素设置为容器
+> - 当元素设置成弹性容器后，它的所有子元素变成弹性项目此时项目的float/clear/vertical-align属性会失效
+#### 2) 主轴方向：flex-direction:
+> - row，默认值，主轴是x轴，主轴起点是左端
+> - row-reverse,  主轴是x轴，主轴起点是右端
+> - column，主轴是y轴，主轴起点在顶部
+> - column-reverse,主轴是y轴，主轴起点在底部
+#### 3) 换行显示：flex-wrap
+> - nowrap 默认值，空间不够时，也不换行，项目自动缩小
+> - wrap 空间不够就换行
+> - wrap-reverse 换行，并反转
+#### 4) flex-flow
+> - flex-direction + flex-wrap
+#### 5) 定义项目在主轴上的对齐方式：justify-content
+> - flex-start,默认值，以主轴起点对齐
+> - flex-end，以主轴终点对齐
+> - center  在主轴上居中对齐
+> - space-between 两端对齐，两端无空白
+> - space-around 每个间距大小相同，两边会留白
+#### 6) 定义项目在交叉轴上的对齐方式：align-items
+> - flex-start 交叉轴起点对齐
+> - flex-end 交叉轴终点对齐
+> - center 交叉轴居中对齐
+> - baseline 交叉轴基线对齐，就是交叉轴起点
+> - stretch 前提，项目不写高。占满交叉轴上所有的空间
+#### 7) 项目中的属性
+> - order 定义项目排列顺序，值越小，越靠近起点，默认值为0
+> - flex-grow 定义项目的放大比例 取值：无单位整数，默认值0，不放大
+> - flex-shrink 定义项目缩小的比例，容器空间不足时，项目该如何缩小。默认值为1。 取值为0，不缩小。取值越大，缩小越快。
+> - flex-basis 主轴存在剩余空间时，分配给此项目多少空间，默认auto即本身宽度
+> - flex: 默认值是 0 1 auto
+#### 7) align-self 
+> - 子项目自身的交叉轴对齐方式，会覆盖容器的align-item属性
+#### 8) flex-grow和flex-shrink相关计算公式
+> - 子元素空间 < 父容器
+                
+                父容器剩余空间 = 父容器宽度 - 子元素宽度之和
+                增长单位 = 父容器剩余空间 / 各子元素flex-grow之和
+                子元素实际宽度 = (flex-basis) + 增长单位 * (flex-grow)
+> - 子元素空间 > 父容器
+                
+                子元素溢出的宽度 = 子元素的宽度之和 - 子元素宽度之和
+                收缩单位 = 子元素溢出的宽度 / 各子元素flex_shrink之和
+                计算的子元素的宽度 = (flex-basis) - 收缩单位*(flex-shrink)
+#### 9) 手写一个圣杯布局
+> - 包括header,nav,main,aside,footer
+                
+                // mian.html
+                <header>header</header>
+                <div class="container">
+                    <main>main</main>
+                    <nav>nav</nav>
+                    <aside>aside</aside>
+                </div>
+                <footer>footer</footer>
+
+
+                // mian.css
+                @charset "UTF-8";
+                /**
+                 * 
+                 * @authors ${冰红茶} (${hblvsjtu@163.com})
+                 * @date    2019-07-31
+                 * @version $0.0.1$
+                 */
+
+                body {
+                    display: flex;
+                    flex-flow: column wrap; 
+                    min-width: 350px;
+                    min-height: 500px;
+                    height: 100%;
+                }
+
+                header,
+                footer {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex: 0 0 100px;
+                    background: gray;
+                }
+
+                header {
+                    order: 1;
+                }
+
+                footer {
+                    order: 3;
+                }
+
+                .container {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    order: 2;
+                    flex: 1 1 auto;
+                }
+
+                .container main {
+                    order: 2;
+                    flex: 1 1 auto;
+                    background: red;
+                }
+
+                .container nav {
+                    order: 1;
+                    flex: 0 0 200px;
+                    background: yellow;
+                }
+
+                .container aside {
+                    order: 3;
+                    flex: 0 0 150px;
+                    background: green;
+                }
+
+                .container main,
+                .container nav,
+                .container aside {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+>>>>>> ![图6-2 flex圣杯布局](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE6-2%20flex%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80.png?raw=true)
+
 <h3 id='6.8'>6.8 响应式布局</h3>
 
         
@@ -2067,9 +3137,51 @@
 <h3 id='6.9'>6.9 变形动画</h3>
 
         
-#### 1) null
-> -
-            
+#### 1) 二维动画
+> - 引自[落霞与孤鹜齐飞](https://segmentfault.com/a/1190000015236871)
+                
+                transform: translate(x, y); 沿着 X 和 Y 轴移动元素。
+                transform: translate(100px, 100px);
+
+                transform: rotate(angle); 旋转元素。
+                transform: rotate(45deg);
+
+                transform: scale(x, y); 倍数改变元素的宽度和高度。
+                transform: scale(2, 3);
+
+                transform: skew(x, y); 沿着 X 和 Y 轴倾斜。
+                transform: skew(45deg, -45deg);
+
+                transform-origin: x y; 旋转的基点位置（默认center center）。
+                transform-origin: right bottom;
+
+                transform: translateX(45px) rotate(45deg); 合并简写
+#### 2) 三维动画
+> - 引自[落霞与孤鹜齐飞](https://segmentfault.com/a/1190000015236871)
+> - preserve-3d：保证所有子元素都处于同一个三维空间
+> - perspective定义摄像机（也就是作为观众的我们）到屏幕的距离
+> - perspective-origin定义摄像机观察到的画面中的灭点（vanishing point）的位置
+                
+                transform-style: preserve-3d;
+                perspective: 24px;  设置元素被查看位置的视图  
+                perspective-oragin: center center; 改变视点的位置
+
+                transform: translate3d();
+                transform: translateX();
+                transform: translateY();
+                transform: translateZ();
+
+                transform: rotate3d();
+                transform: rotateX();
+                transform: rotateY();
+                transform: rotateZ();
+
+                transform: scale3d();
+                transform: scaleX();
+                transform: scaleY();
+                transform: scaleZ();
+
+
 <h3 id='6.10'>6.10 补间动画</h3>
 
         
@@ -2089,8 +3201,66 @@
 > - 脚本的执行时间和执行顺序
 > - async的脚本是看那个脚本最先下载完成先执行，跟写在HTML上的顺序是不同的
 > - defer实在DOM解析完成后，DOMContentLoaded 事件触发之前完成的，一般是按照写在HTML上的顺序执行，但是实际体验下来这个顺序不能保证
->>>>>> ![图9-1 async和defer的区别]()
+>>>>>> ![图9-1 async和defer的区别](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE9-1%20async%E5%92%8Cdefer%E7%9A%84%E5%8C%BA%E5%88%AB.png?raw=true)
+<h3 id='9.5'>9.5 浏览器性能和计时器</h3>
+
         
+#### 1) 高消耗的样式
+> - box-shadows
+> - border-radius
+> - transparency
+> - transforms
+> - CSS filters（性能杀手）
+#### 2) 减少重排Reflow的经验
+> - 不要逐条修改CSS样式，最好预先写成class，再使用dom.classList.add()
+> - 离线修改DOM: 先把 DOM 给 display:none, 再把它还原；
+> - 为动画的元素使用绝对定位 absolute / fixed
+> - 不要使用 table 布局
+#### 3) 优化动画性能
+> - GPU （Graphics Processing Unit） 是图像处理器，再处理图像上更加有效率
+> - GPU加速可以不仅应用于3D，而且也可以应用于2D，常用的场合：Canvas2D，布局合成（Layout Compositing）, CSS3转换（transitions），CSS3 3D变换（transforms），WebGL和视频(video)。
+> - 所以如果需要提升transforms的性能，可以强制为它开启3D，如transform: translate3d(10px, 10px, 0);
+> - 或者使用"transform:translateZ(0);
+                
+                .cube { 
+                    -webkit-transform: translateZ(0); 
+                    -moz-transform: translateZ(0); 
+                    -ms-transform: translateZ(0); 
+                    -o-transform: translateZ(0); 
+                    transform: translateZ(0);
+                }
+> - 在 Chrome 和 Safari中， 以下声明可以解决转换或动画可能会看到闪烁的效果
+                
+                .cube { 
+                    -webkit-backface-visibility: hidden;
+                    -moz-backface-visibility: hidden;
+                    -ms-backface-visibility: hidden;
+                    backface-visibility: hidden;
+                    -webkit-perspective: 1000;
+                    -moz-perspective: 1000;
+                    -ms-perspective: 1000;
+                    perspective: 1000;
+                }   
+> - 那问题来了，为什么开启3D来打开GPU加速可以优化动画性能呢？因为浏览器DOM渲染需要经过重排和重绘两个过程，其中重排的消耗最大。那问题就来到如果减少重排和重绘，甚至避免重排和重绘，借此提高动画的性能。动画是有帧组成的连续画面，开启GPU加速，即是GPU计算'层'，或者叫「纹理」，实际上是是DOM快照，通过已知变换矩阵来修改'层'，实质上是位图，来避免DOM的重排和重绘。
+> - 那问题又来了：什么情况下会触发层的创建呢？引自[chokcoco的回答](https://github.com/ccforward/cc/issues/42)
+>> - 3D 或透视变换(perspective、transform) CSS 属性
+>> - 使用加速视频解码的 元素
+>> - 拥有 3D (WebGL) 上下文或加速的 2D 上下文的 元素
+>> - 混合插件(如 Flash)
+>> - 对自己的 opacity 做 CSS 动画或使用一个动画变换的元素
+>> - 拥有加速 CSS 过滤器的元素， 如：
+                
+                filter: brightness(50%); // 明度滤镜
+                filter: saturate(1000%); // 饱和度滤镜
+                filter: blur(5px); // 模糊滤镜
+                filter: hue-rotate(45deg); // 色相反转滤镜
+                filter: invert(100%); // 颜色反转滤镜
+                filter: contrast(25%); // 对比度滤镜
+                filter: drop-shadow(5px 5px 5px red); //阴影滤镜 第一个值是X方向上的位移，第二个值是Y轴方向上的位移，第三个值是模糊的大小，第四个值是模糊的颜色。
+
+>> - 元素有一个包含复合层的后代节点，换句话说，就是一个元素拥有一个子元素，该子元素在自己的层里)
+>> - 元素有一个 z-index 较低且包含一个复合层的兄弟元素(换句话说就是该元素在复合层上面渲染
+            
 ------      
         
 <h2 id='10'>十、V8引擎篇</h2>
