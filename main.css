@@ -6,62 +6,29 @@
  * @version $0.0.1$
  */
 
-body {
-	display: flex;
-	flex-flow: column wrap; 
-    min-width: 350px;
-    min-height: 500px;
-    height: 100%;
-}
-
-header,
-footer {
-	display: flex;
-  	justify-content: center;
-  	align-items: center;
-	flex: 0 0 100px;
-	background: gray;
-}
-
-header {
-	order: 1;
-}
-
-footer {
-	order: 3;
-}
-
-.container {
-	display: flex;
-	flex-flow: row nowrap;
-	order: 2;
-	flex: 1 1 auto;
-}
-
-.container main {
-	order: 2;
-	flex: 1 1 auto;
-	background: red;
-}
-
-.container nav {
-	order: 1;
-	flex: 0 0 200px;
+.contain {
+	position: relative;
+	top: 100px;
+	left: 100px;
+	height: 500px;
+	width: 500px;
+	overflow: scroll;
 	background: yellow;
 }
 
-.container aside {
-	order: 3;
-	flex: 0 0 150px;
-	background: green;
-}
-
-.container main,
-.container nav,
-.container aside {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
+ .camera {
+ 	position: absolute;
+ 	top: 400px;
+ 	left: 400px;
+ 	width: 200px;
+ 	height: 200px;
+    background: red;
+ }
+ .camera .cube {
+ 	width: 100px;
+ 	height: 100px;
+ 	margin: 50px;
+ 	background: green;
+ }
 
 
