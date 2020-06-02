@@ -36,6 +36,7 @@
 ### [3.11 跨域](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%203.md#3.11)
 ### [3.12 函数柯里化](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%203.md#3.12)
 ### [3.13 高阶函数](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%203.md#3.13)
+### [3.14 Promise.all 和 Promise.race](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%203.md#3.14)
 ## [四、正则表达式篇](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%204.md#4)
 ### [4.1 断言](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%204.md#4.1)
 ### [4.2 分组](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%204.md#4.2)
@@ -85,3 +86,5 @@
 ### [9.7 常见的网络安全问题](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%209.md#9.7)
 ## [十、V8引擎篇](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%210.md#10)
 ### [10.0 事件循环](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%210.md#10.1)
+## [十一、算法篇](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%211.md#11)
+### [11.0 事件循环](https://github.com/hblvsjtu/FrontEndTechonology/blob/master/README%211.md#11.1)

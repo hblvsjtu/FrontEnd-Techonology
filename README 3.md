@@ -21,6 +21,7 @@
 ### [3.11 跨域](#3.11)
 ### [3.12 函数柯里化](#3.12)
 ### [3.13 高阶函数](#3.13)
+### [3.14] Promise.all 和 Promise.race(#3.14)
 
         
 ------      
@@ -1382,3 +1383,39 @@
                     while(l--) if(func(this[l])) arr.unshift(this[l]);
                     return arr;
                 }
+
+                
+<h3 id='3.14'>3.14 Promise.all 和 Promise.race</h3>
+                
+#### 1) Promise.all
+> - 使用计数器， 返回一个数组promise
+```js
+        function promiseAll(arr) {
+            return new Promise((resolve, reject) => {
+                const res = [];
+                let leftNum = arr.length;
+                arr.forEach(p => p
+                    .then(resolveRes => {
+                        res.push(resolveRes);
+                        leftNum--;
+                        if(!leftNum) resolve(res);
+                    })
+                    .catch(err => reject(err))
+                )
+            })
+        }
+```
+
+#### 2) Promise.race
+> - 使用计数器， 返回一个promise
+```js
+        function promiseAll(arr) {
+            return new Promise((resolve, reject) => {
+                const res = [];
+                arr.forEach(p => p
+                    .then(resolveRes => resolve(resolveRes))
+                    .catch(err => reject(err))
+                )
+            })
+        }
+```
