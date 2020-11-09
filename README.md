@@ -5,161 +5,278 @@
 ------    
     
 平常在生活中或者工作中不断的学习前端知识，记录和分享吾之所见吾之所悟^_ ^
-
-## 目录
-## [一、类型判断篇](#1)
-### [1.1 基本数据类型](#1.1)
-### [1.2 对象类型系统](#1.2)
-### [1.3 平台](#1.3)
-## [二、常用方法篇](#2)
-### [2.1 拷贝](#2.1)
-### [2.2 类数组判断与转化](#2.2)
-### [2.3 数组去重](#2.3)
-### [2.4 数组洗牌](#2.4)
-### [2.5 数组排序](#2.5)
-### [2.6 最大重复子序列](#2.6)
-### [2.7 最大重复子数组](#2.7)
-### [2.8 ajax封装](#2.8)
-### [2.9 String.format](#2.9)
-### [2.10 String.thousandSplit](#2.10)
-## [三、原理实现篇](#3)
-### [3.1 call/apply/bind](#3.1)
-### [3.2 Deferred和Promise](#3.2)
-### [3.3 async/await](#3.3)
-### [3.4 观察者模式](#3.4)
-### [3.5 防抖动和截流](#3.5)
-### [3.6 类的继承](#3.6)
-### [3.7 new](#3.7)
-### [3.8 Object.create()](#3.8)
-### [3.9 Object.keys/Object.values/Object.entries](#3.9)
-### [3.10 setTimeout 与 setInterval](#3.10)
-### [3.11 跨域](#3.11)
-### [3.12 函数柯里化](#3.12)
-### [3.13 高阶函数](#3.13)
-## [四、正则表达式篇](#4)
-### [4.1 断言](#4.1)
-### [4.2 分组](#4.2)
-### [4.3 非贪婪](#4.3)
-### [4.4 电话号码/身份证/网址/邮箱](#4.4)
-## [五、js和html效果篇](#5)
-### [5.1 获取元素样式/位置/尺寸](#5.1)
-### [5.2 拖拽](#5.2)
-### [5.3 图片懒加载](#5.3)
-### [5.4 轮播](#5.4)
-### [5.5 滑动](#5.5)
-### [5.6 级联](#5.6)
-### [5.7 图片剪裁](#5.7)
-### [5.8 图片压缩](#5.8)
-### [5.9 Tab](#5.9)
-## [六、CSS效果篇](#5)
-### [6.1 水平居中](#6.1)
-### [6.2 垂直居中](#6.2)
-### [6.3 水平垂直居中](#6.3)
-### [6.4 清除浮动](#6.4)
-### [6.5 消除幽灵空格](#6.5)
-### [6.6 三列布局](#6.6)
-### [6.7 弹性布局](#6.7)
-### [6.8 响应式布局](#6.8)
-### [6.9 变形动画](#6.9)
-### [6.10 补间动画](#6.10)
-## [七、前端工程化和模块化篇](#7)
-### [7.1 npm](#7.1)
-### [7.2 Webpack](#7.2)
-### [7.3 Bable](#7.3)
-### [7.4 Lint](#7.4)
-### [7.5 常见的模块化协议](#7.5)
-## [八、计算机网络篇](#8)
-### [8.1 五层网络和七层网络](#8.1)
-### [8.2 三次握手和四次挥手](#8.2)
-### [8.3 TCP与UDP](#8.3)
-### [8.4 HTTP与HTTPS协议](#8.4)
-### [8.5 HTTP状态码](#8.5)
-### [8.6 常见的网络安全问题](#8.6)
-## [九、浏览器篇](#8)
-### [9.1 访问一个链接发生的全过程](#9.1)
-### [9.2 浏览器渲染过程](#9.2)
-### [9.3 defer和ansys的区别](#9.3)
-### [9.4 IE的hack写法](#9.4)
-### [9.5 浏览器性能和计时器](#9.5)
-### [9.6 HTTP状态码](#9.6)
-### [9.7 常见的网络安全问题](#9.7)
-## [十、V8引擎篇](#10)
-### [10.0 事件循环](#10.1)
+- [FET](#fet)
+  - [作者：冰红茶](#作者冰红茶)
+  - [一、类型判断篇](#一类型判断篇)
+    - [1.1 基本数字类型](#11-基本数字类型)
+      - [1) null](#1-null)
+      - [2) NaN](#2-nan)
+      - [3) undefined](#3-undefined)
+      - [4) number](#4-number)
+      - [5) boolean](#5-boolean)
+    - [1.2 对象类型系统](#12-对象类型系统)
+      - [1) object](#1-object)
+      - [2) 函数](#2-函数)
+      - [3) 正则表达式](#3-正则表达式)
+      - [4) 日期](#4-日期)
+      - [5) 数组](#5-数组)
+      - [6) 全类型判断](#6-全类型判断)
+    - [1.3 平台](#13-平台)
+      - [1) window](#1-window)
+      - [2）浏览器](#2浏览器)
+  - [二、常用方法篇](#二常用方法篇)
+    - [2.1 拷贝](#21-拷贝)
+      - [1) 数组浅拷贝](#1-数组浅拷贝)
+      - [2) 数组深拷贝](#2-数组深拷贝)
+    - [2.2 类数组判断与转化](#22-类数组判断与转化)
+      - [1) 判断](#1-判断)
+      - [2) slice的内部实现](#2-slice的内部实现)
+      - [3) 转化](#3-转化)
+    - [2.4 数组乱序](#24-数组乱序)
+    - [2.8 ajax封装](#28-ajax封装)
+      - [1) 功能](#1-功能)
+    - [2.9 String.format](#29-stringformat)
+      - [1) 功能](#1-功能-1)
+      - [2) 一个更加简介的办法：利用replace()](#2-一个更加简介的办法利用replace)
+    - [2.10 String.thousandSplit](#210-stringthousandsplit)
+      - [1) 功能](#1-功能-2)
+      - [2) 实现](#2-实现)
+  - [三、原理实现篇](#三原理实现篇)
+    - [3.1 call/apply/bind](#31-callapplybind)
+      - [1) call](#1-call)
+      - [2) apply](#2-apply)
+      - [3) bind](#3-bind)
+    - [3.2 Deferred和Promise](#32-deferred和promise)
+      - [1) promise/A规范](#1-promisea规范)
+      - [2) Deferred/promise](#2-deferredpromise)
+      - [2) Promise(第一次自己写的)](#2-promise第一次自己写的)
+      - [3) Promise(看了别人代码后自己写的)](#3-promise看了别人代码后自己写的)
+    - [3.4 观察者模式](#34-观察者模式)
+      - [1) 要点](#1-要点)
+      - [2) 代码](#2-代码)
+    - [3.5 防抖动和截流](#35-防抖动和截流)
+      - [1) 相同点](#1-相同点)
+      - [2) 不同点](#2-不同点)
+      - [3) 防抖动](#3-防抖动)
+      - [4) 截流/频率控制](#4-截流频率控制)
+      - [5) 防抖动和截流合并](#5-防抖动和截流合并)
+    - [3.6 类的继承](#36-类的继承)
+      - [1) 属性拷贝](#1-属性拷贝)
+      - [2) 原型式继承](#2-原型式继承)
+      - [3) 原型链继承](#3-原型链继承)
+      - [4) 构造函数继承](#4-构造函数继承)
+      - [5) 组合继承](#5-组合继承)
+      - [6) 组合继承优化1](#6-组合继承优化1)
+      - [7) 组合继承优化2](#7-组合继承优化2)
+    - [3.7 new](#37-new)
+      - [1) 要点](#1-要点-1)
+    - [3.8 Object.create()](#38-objectcreate)
+      - [1) 参数](#1-参数)
+    - [3.9 Object.keys/Object.values/Object.entries](#39-objectkeysobjectvaluesobjectentries)
+      - [1) Object.keys](#1-objectkeys)
+      - [2) Object.values](#2-objectvalues)
+      - [2) Object.entrie](#2-objectentrie)
+    - [3.10 setTimeout 与 setInterval](#310-settimeout-与-setinterval)
+      - [1) 最短间隔时间](#1-最短间隔时间)
+    - [3.11 跨域](#311-跨域)
+      - [1) 通过document.domain跨域](#1-通过documentdomain跨域)
+      - [2) 通过location.hash跨域](#2-通过locationhash跨域)
+      - [3) 通过postMessage](#3-通过postmessage)
+      - [4) Jsonp](#4-jsonp)
+      - [5) Access-Control-Allow-Origin](#5-access-control-allow-origin)
+    - [3.12 函数柯里化](#312-函数柯里化)
+      - [1) 定义](#1-定义)
+      - [2) 两段不定参数版本](#2-两段不定参数版本)
+      - [3) 不定段不定参数版本](#3-不定段不定参数版本)
+    - [3.13 高阶函数](#313-高阶函数)
+      - [1) 定义](#1-定义-1)
+      - [2) 实现一个map函数](#2-实现一个map函数)
+      - [3) 实现一个forEach函数](#3-实现一个foreach函数)
+      - [4) 实现一个reduce函数](#4-实现一个reduce函数)
+      - [5) 实现一个filter函数](#5-实现一个filter函数)
+  - [四、正则表达式](#四正则表达式)
+    - [4.1 断言](#41-断言)
+      - [1) 定义](#1-定义-2)
+      - [2) 类型](#2-类型)
+    - [4.2 反向引用](#42-反向引用)
+      - [1) 定义](#1-定义-3)
+      - [2) 要点](#2-要点)
+    - [4.3 非贪婪](#43-非贪婪)
+      - [1) 定义](#1-定义-4)
+    - [4.4 电话号码/身份证/网址/邮箱](#44-电话号码身份证网址邮箱)
+      - [1) QQ号码](#1-qq号码)
+      - [2) 电话号码](#2-电话号码)
+      - [3) 身份证](#3-身份证)
+      - [3) 网址](#3-网址)
+      - [4) 邮箱](#4-邮箱)
+  - [五、js和html效果篇](#五js和html效果篇)
+    - [5.1 获取元素样式/位置/尺寸](#51-获取元素样式位置尺寸)
+      - [1) 样式](#1-样式)
+      - [2) 位置](#2-位置)
+    - [5.2 拖拽](#52-拖拽)
+      - [1) 行内元素](#1-行内元素)
+    - [5.3 图片懒加载](#53-图片懒加载)
+      - [1) 行内元素](#1-行内元素-1)
+    - [5.4 轮播](#54-轮播)
+      - [1) 行内元素](#1-行内元素-2)
+    - [5.5 滑动](#55-滑动)
+      - [1) 行内元素](#1-行内元素-3)
+    - [5.6 级联](#56-级联)
+      - [1) 行内元素](#1-行内元素-4)
+    - [5.7 图片剪裁](#57-图片剪裁)
+      - [1) 行内元素](#1-行内元素-5)
+    - [5.8 图片压缩](#58-图片压缩)
+      - [1) 行内元素](#1-行内元素-6)
+    - [5.9 Tab](#59-tab)
+      - [1) 行内元素](#1-行内元素-7)
+  - [六、CSS效果篇](#六css效果篇)
+    - [6.1 水平居中](#61-水平居中)
+      - [1) 行内元素](#1-行内元素-8)
+      - [2) 块级元素](#2-块级元素)
+    - [6.2 垂直居中](#62-垂直居中)
+      - [1) 行内元素](#1-行内元素-9)
+      - [2) 块级元素](#2-块级元素-1)
+    - [6.3 水平垂直居中](#63-水平垂直居中)
+      - [1) 绝对定位auto方案](#1-绝对定位auto方案)
+      - [2) 绝对定位translate方案](#2-绝对定位translate方案)
+      - [3) inline-block方案](#3-inline-block方案)
+      - [4) table-cell方案](#4-table-cell方案)
+    - [6.4 清除浮动](#64-清除浮动)
+      - [1) 原因](#1-原因)
+      - [2) 解决办法](#2-解决办法)
+    - [6.5 幽灵空白节点](#65-幽灵空白节点)
+      - [1) W3C规范](#1-w3c规范)
+      - [2) 如何消除呢？](#2-如何消除呢)
+    - [6.6 三列布局](#66-三列布局)
+      - [1) 双飞翼布局](#1-双飞翼布局)
+      - [2) 圣杯布局](#2-圣杯布局)
+      - [3) 简单float布局](#3-简单float布局)
+      - [4) 绝对float布局](#4-绝对float布局)
+      - [5) 绝对布局](#5-绝对布局)
+    - [6.7 弹性布局](#67-弹性布局)
+      - [1) 容器](#1-容器)
+      - [2) 主轴方向：flex-direction:](#2-主轴方向flex-direction)
+      - [3) 换行显示：flex-wrap](#3-换行显示flex-wrap)
+      - [4) flex-flow](#4-flex-flow)
+      - [5) 定义项目在主轴上的对齐方式：justify-content](#5-定义项目在主轴上的对齐方式justify-content)
+      - [6) 定义项目在交叉轴上的对齐方式：align-items](#6-定义项目在交叉轴上的对齐方式align-items)
+      - [7) 项目中的属性](#7-项目中的属性)
+      - [7) align-self](#7-align-self)
+      - [8) flex-grow和flex-shrink相关计算公式](#8-flex-grow和flex-shrink相关计算公式)
+      - [9) 手写一个圣杯布局](#9-手写一个圣杯布局)
+    - [6.8 响应式布局](#68-响应式布局)
+      - [1) null](#1-null-1)
+    - [6.9 变形动画](#69-变形动画)
+      - [1) 二维动画](#1-二维动画)
+      - [2) 三维动画](#2-三维动画)
+    - [6.10 补间动画](#610-补间动画)
+      - [1) null](#1-null-2)
+  - [九、浏览器篇](#九浏览器篇)
+    - [9.3 defer和async的区别](#93-defer和async的区别)
+      - [1) 相同点](#1-相同点-1)
+      - [2) 不同点](#2-不同点-1)
+    - [9.5 浏览器性能和计时器](#95-浏览器性能和计时器)
+      - [1) 高消耗的样式](#1-高消耗的样式)
+      - [2) 减少重排Reflow的经验](#2-减少重排reflow的经验)
+      - [3) 优化动画性能](#3-优化动画性能)
+    - [10.0 事件循环](#100-事件循环)
+      - [1) 主线程](#1-主线程)
+      - [2) 任务队列(Macrotasks)](#2-任务队列macrotasks)
+      - [3) 微任务队列(Microtasks)](#3-微任务队列microtasks)
 
         
 ------      
         
-<h2 id='1'>一、类型判断篇</h2>
-<h3 id='1.1'>1.1 基本数字类型</h3>
+## 一、类型判断篇
+### 1.1 基本数字类型
 
         
 #### 1) null
 > - 直接跟v他自己比较即可
-                
+```js
                 function isNull(o) {
                     return o === null;
                 }
+```
 #### 2) NaN
 > - 因为它连跟它自己比较都不相等，可以用此特性进行判断
-                
+```js           
                 function isNaN(o) {
                     return o !== o;
                 }
+```
+
 #### 3) undefined
 > - undefined它并不是一个保留词，他是全局对象的一个属性，这说明什么呢？说明它有可能会被改写。到了ES5被改成只读了，但是在局部作用域中还是会被改写，虽然在最新的chrome 75.0.3770.142中我并没有发现改写-.-||
 > - 为什么是void 0? 因为根据MDN的解释：The void operator evaluates the given expression and then returns undefined. 无论你给他赋什么的值，都会返回undefined，而0应该是最简单的喽
-                
+```js 
                 function isUndefined(o) {
                     return o === void 0;
                 }
+```
+
 #### 4) number
 > - 采用鸭子辩型
 > - 因为如果纯粹使用typeof的话会把包装类也识别成对象；
-                
+```js
                 function isNumber(o) {
                     return '[object Number]' === {}.toString.call(o) && isFinite(o); 
                 }
+```
+
 #### 5) boolean
 > - 采用鸭子辩型
 > - 因为如果纯粹使用typeof的话会把包装类也识别成对象；
-                
+```js
                 function isboolean(o) {
                     return '[object Boolean]' === {}.toString.call(o); 
                 }
+```
 
-<h3 id='1.2'>1.2 对象类型系统</h3>
+### 1.2 对象类型系统
 
 #### 1) object
 > - 
+```js
                 function isObject(o) {
                     return '[object Object]' === {}.toString.call(o); 
                 }
+```
+
 #### 2) 函数
 > - 
-                
+```js   
                 function isFunction(o) {
                     return '[object Function]' === {}.toString.call(o); 
                 }
+```
+
 #### 3) 正则表达式
 > - 
-                
+```js
                 function isRegExp(o) {
                     return '[object RegExp]' === {}.toString.call(o); 
                 }
+```
+
 #### 4) 日期
 > - 
-                
+```js
                 function isDate(o) {
                     return '[object Date]' === {}.toString.call(o); 
                 }
+```
+
 #### 5) 数组
 > - 
-                
+```js
                 function isArray(o) {
                     return '[object Array]' === {}.toString.call(o); 
                 }
+```
+
 #### 6) 全类型判断
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -176,15 +293,15 @@
                         return type ? type : '它不是基本类型'
                     }
                 }
+```
 
-
-<h3 id='1.3'>1.3 平台</h3>
+### 1.3 平台
         
 #### 1) window
 > - 需要区分不同的平台
 > - IE6、7、8利用window == document为真 但是document == window为假的神奇特性
 > - 标准浏览器及IE9,IE10等使用鸭子辩型的方法
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -200,11 +317,13 @@
                 function isWindow(obj) {
                     return /^\[object (Window|DOMWindow|global)/.test({}.toString.call(obj));
                 }
+```
+
 #### 2）浏览器
 > - 判断浏览器类型
 > - 利用navigator.userAgent来判断
 > - 要把browsers数组里面的子项按照顺序来放，因为有时候userAgent里面会同时出现两种或以上的子项，当Safari出现的时候一般在userAgent的最后面，而"Chrome"次之，所以需要把他们放在前面先进行遍历
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -228,12 +347,12 @@
                     }
                     return browser;
                 }             
-
+```
 
 ------      
         
-<h2 id='2'>二、常用方法篇</h2>
-<h3 id='2.1'>2.1 拷贝</h3>
+## 二、常用方法篇
+### 2.1 拷贝
 
         
 #### 1) 数组浅拷贝
@@ -242,7 +361,7 @@
 #### 2) 数组深拷贝
 > - 先对输入进行判断，是数组、对象还是其他
 > - 然后如果是数组或者对象的时候进行遍历，子元素是数组或者对象的时候直接赋值，否则进行递归
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -271,15 +390,16 @@
                     }
                     return o;
                 };
-                
-<h3 id='2.2'>2.2 类数组判断与转化</h3>
+```
+
+### 2.2 类数组判断与转化
 
         
 #### 1) 判断
 > - 是一个对象
 > - 有length属性
 > - length属性的值是一个非负有限整数
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -290,10 +410,12 @@
                 function isArrayLike(obj) {
                     return obj && (typeof obj === 'object') &&  (obj.length >= 0) &&  obj.length < 4294967296 && (obj.length === Math.floor(obj.length))
                 }
+```
+
 #### 2) slice的内部实现
 > - 返回一个数组
 > - 循环赋值从0到length
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -311,11 +433,13 @@
                       }  
                       return result;  
                  }
+```
+
 #### 3) 转化
 > - 利用slice方法 [].slice.call(a);
 > - Array.from();
 > - 手动转化
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -329,10 +453,10 @@
                     while(l > 0) arr[--l] = obj[l];
                     return arr;
                 }
-
+```
                     
-<h3 id='2.4'>2.4 数组乱序</h3>
-        
+### 2.4 数组乱序
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -355,17 +479,17 @@
 
                 shuffle(arr);
                 //[1, 4, 3, 5, 2, 6]
-
+```
 
                         
-<h3 id='2.8'>2.8 ajax封装</h3>
+### 2.8 ajax封装
         
         
 #### 1) 功能
 > - 
 > - 
 
-<h3 id='2.9'>2.9 String.format</h3>
+### 2.9 String.format
         
         
 #### 1) 功能
@@ -373,7 +497,7 @@
 > - 相当于字符串模板
 > - 参数是模板的数据
 > - 分别用两个正则表达式切割关键词和非关键词，然后在进行拼接
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -389,9 +513,11 @@
 
                 let str = "${a}ads${a}sad${b}as${c}zx${c}";
                 str.iFormat({a: ' I ', b: ' love ', c: ' you '}); //" I ads I sad love as you zx you "
+```
+
 #### 2) 一个更加简介的办法：利用replace()
 > - 第二个参数可以是函数，将每匹配到的一组分组就执行一次
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -408,9 +534,9 @@
                 let str = "${a}ads${a}sad${b}as${c}zx${c}";
                 str.iFormat({a: ' I ', b: ' love ', c: ' you '});
                 // " I ads I sad love as you zx you "
+```
 
-
-<h3 id='2.10'>2.10 String.thousandSplit</h3>
+### 2.10 String.thousandSplit
            
 #### 1) 功能
 > - 西方的数字从右往左每三位加一个分隔符
@@ -419,7 +545,7 @@
 > - $表示从右往左
 > - ，不能放在第一位
 > - 需要全局判断，因为不止匹配一个
-            
+```js
             /**
              * 
              * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -435,13 +561,13 @@
             // "234,123,456"
             '1234123456'.thousandSplit('$');
             // "1$234$123$456"
-
+```
 
         
 ------      
         
-<h2 id='3'>三、原理实现篇</h2>
-<h3 id='3.1'>3.1 call/apply/bind</h3>
+## 三、原理实现篇
+### 3.1 call/apply/bind
 
         
 #### 1) call
@@ -449,7 +575,7 @@
 > - 该函数的作用域被绑定为第一个形参
 > - 其他的形参作为原函数的参数
 > - 模拟的方法被绑定在函数的原型上，方便调用
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -475,10 +601,11 @@
                 a.myCall(b, 2, 3);
 
                 // 4
+```
 
 #### 2) apply
 > - 根据call把参数改成数组输入的形式
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -501,12 +628,14 @@
                 a.myApply(b, [2, 3]);
 
                 // 3
+```
+
 #### 3) bind
 > - 返回一个函数
 > - 函数的作用域为bind的第一个参数
 > - 如果bind的参数不足够原函数消化，剩余的参数可以在返回的函数中输入
 > - 作为原型挂靠在Function上
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -539,8 +668,9 @@
                 11
                 c(3);
                 16
+```
 
-<h3 id='3.2'>3.2 Deferred和Promise</h3>
+### 3.2 Deferred和Promise
 
         
 #### 1) promise/A规范
@@ -554,7 +684,7 @@
 > - Deferred更像是一个触发器
 > - promise的then方法用来传递handlerQueue序列，handlerQueue是由每个then方法里面resolve和reject组成的handler集合
 > - Deferred的resolve和reject遍历handlerQueue序列里面的handler，如果返回的结果是一个promise，就的Deferred的promise更新为返回的结果，如果不是的话就将结果作为下次resolve的实参。注意的是每遍历一个元素都需要把handlerQueue去掉相应的handler
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -645,13 +775,15 @@
                 }).then(result => {
                     console.info(result)
                 })
+```
+
 #### 2) Promise(第一次自己写的)
 > - Promise是Deferred/promise的混合版
 > - Promise既作触发器又做储存器
 > - 需要在resolve和reject上包装，已达到窃听的效果
 > - 实现resolve和reject原型方法
 > - 如果返回值是空类型，则正常返回this作链式调用，如果返回值非空也非Promise类型，则作为参数传到下一个then，可惜这个我实现不了
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -728,6 +860,7 @@
                 }).then(data => {
                         console.log('fulfilled = ', data);
                     })
+```
 
 #### 3) Promise(看了别人代码后自己写的)
 > - 为了支持同步的Promise，采用异步调用_resolve和_reject
@@ -737,7 +870,7 @@
 > - resolve和reject方法就是返回一个仅有resolve或者reject方法的promise，同时resolve方法将判断参数的类型，如果参数是非promise类型，将会把它包装成promise类型
 > - all方法是返回一个promise，循环得到结果放到一个数组中，由于每个子项执行的时间不一致，只能新建计数器来统计then执行的次数，当计数器等于all的数组参数个数的时候才进行resolve的统一处理结果数组
 > - race方法是返回一个promise，遍历所有的promise数组，不需要搜集结果
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1026,16 +1159,16 @@
                 })
 
                 // fulfilled =  (3) [9, 8, 7]
-
+```
                 
                         
-<h3 id='3.4'>3.4 观察者模式</h3>
+### 3.4 观察者模式
                 
 #### 1) 要点
 > - 监听器listener：其实是一系列的函数
 > - 监听器类型: type
 > - 监听器注册表：
-                
+```js
                 let _registers = [
                                     {
                                         type: '',
@@ -1043,8 +1176,10 @@
                                     },
                                     ...
                                 ]
+```
+
 > - 监听器列表：
-                
+```js
                 
                 let _listeners = {
                     type1: [
@@ -1059,13 +1194,15 @@
                     ],
                     ...
                 }
+```
+
 > - 建立一个类
 >> - 原型变量:注册表和监听器列表
 >> - 原型方法：添加/删除 某类型的监听器
                 
                 
 #### 2) 代码
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1104,9 +1241,9 @@
                     }
                 }
                 Listen.prototype.contructor = Listen;
-
+```
                         
-<h3 id='3.5'>3.5 防抖动和截流</h3>
+### 3.5 防抖动和截流
                 
 #### 1) 相同点
 > - 防止用户频繁的操作造成阻塞或者屏幕抖动，提升用户体验
@@ -1118,7 +1255,7 @@
 > - 需要用到setTimeout
 > - 用bounce对回调函数进行包装
 > - 注意setTimeout和的作用域：内部延迟执行的代码中的this永远指向window，但是回调函数本身的this可以指向其他，所以setTimeout需要先在全局进行定义。
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1137,11 +1274,13 @@
                 document.addEventListener('click', function() {
                     deBounce(3000);
                 });
+```
+
 #### 4) 截流/频率控制
 > - 需要比较实际运行时间长度和设定的周期时间
 > - 立即执行，无需使用setTimeout
 > - 如果实际运行时间长度 > 设定的周期时间, 则运行回调，并且把当前时间戳设为旧时间戳；
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1163,9 +1302,11 @@
                             console.log('i am working');
                         });
                 });
+```
+
 #### 5) 防抖动和截流合并
 > - 在截流里面把防抖动的函数写进去
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1192,15 +1333,15 @@
                             console.log('i am working');
                         });
                 });
-
+```
                         
-<h3 id='3.6'>3.6 类的继承</h3>
+### 3.6 类的继承
                 
 #### 1) 属性拷贝
 > - 这是最简单的，把父类的属性全都拷贝一份
 #### 2) 原型式继承
 > - 只能继承父构造函数的原型对象上的成员, 不能继承父构造函数的实例对象的成员
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1230,6 +1371,7 @@
 
                 // child1.name =  ["lvweiyaun"]
                 // undefined
+```
 
 #### 3) 原型链继承
 > - 将父类的公有和私有属性和公有方法都继承过来的
@@ -1237,7 +1379,7 @@
 > - 缺点
 >> - 新实例无法向父类构造函数传参
 >> - 存在父类私有引用类型属性共享的问题
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1273,12 +1415,13 @@
                 // child2.friends =  ["a", "b"]
                 // child2.friends =  ["a", "b", "lvhongbin"]
                 // child1.friends =  ["a", "b", "lvhongbin"]
-                
+```
+
 #### 4) 构造函数继承
 > - 使用call继承父类的构造函数
 > - 好处：可以得到父类的构造函数属性，向父类构造函数传参。
 > - 坏处：无法得到父类的原型属性
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1317,12 +1460,13 @@
                 p.name =  ["lvweiyaun"]
                 // child1.name =  undefined
                 child1.age =  20
+```
 
 #### 5) 组合继承
 > - 原型链继承 + 构造函数继承
 > - 解决了对象共享的问题，还能拿到父类的构造函数
 > - 但是存在性能问题，因为父类有两次构造
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1361,13 +1505,14 @@
                 // p.name =  ["lvweiyaun"]
                 // child1.name =  ["lvweiyaun"]
                 // child1.age =  20
+```
 
 #### 6) 组合继承优化1
 > - 原型式继承 + 构造函数继承
 > - 解决了对象共享的问题，还能拿到父类的构造函数
 > - 不存在性能问题
 > - 但是子类无法修改原型的constructor属性，因为一旦修改就会同时修改父类的constructor属性，换句话说无法辨别子类的构造函数是谁
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1408,11 +1553,12 @@
                 // child1.name =  ["lvweiyaun"]
                 // child1.age =  20
                 // true
+```
 
 #### 7) 组合继承优化2
 > - 目前来讲比较完美的方法
 > - 使用寄生式组合继承
-                
+```js
                 // 父类
                 function Parent(age) {
                     this.age = age;
@@ -1446,14 +1592,15 @@
                 // child1.name =  ["lvweiyaun"]
                 // child1.age =  20
                 // false
+```
 
-<h3 id='3.7'>3.7 new</h3>
+### 3.7 new
                 
 #### 1) 要点
 > - 返回一个对象
 > - 对象的原型属性等于函数的原型
 > - 对象的属性需要函数去更换自身的作用域为对象的作用域获得
-                
+```js
                 Function.prototype.myNew = function() {
                     let obj = {};
                     obj.__proto__ = this.prototype;
@@ -1474,15 +1621,16 @@
                 b.tell(); // 3
 
                 let c = new a(1,2);
+```
 
 >>>>>> ![图3-1 new原理](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE3-1%20new%E5%8E%9F%E7%90%86.png?raw=true)
 
-<h3 id='3.8'>3.8 Object.create()</h3>
+### 3.8 Object.create()
                 
 #### 1) 参数
 > - 第一个参数是原型对象
 > - 第二个参数是属性特性：value, writable, enumberable, congigurable
-                
+```js
                 Object.prototype.myCreate = function(proto, properties) {
                     let f = function() {};
                     f.prototype = proto;
@@ -1492,12 +1640,13 @@
                     }
                     return o;
                 }
+```
 
-<h3 id='3.9'>3.9 Object.keys/Object.values/Object.entries</h3>
+### 3.9 Object.keys/Object.values/Object.entries
                 
 #### 1) Object.keys
 > - 返回对象的每个可枚举的自身属性键名组成的数组
-                
+```js
                 Object.prototype.myKeys = function(o) {
                     let arr = []
                     for(let key in o) {
@@ -1505,9 +1654,11 @@
                     }
                     return arr;
                 }
+```
+
 #### 2) Object.values
 > - 返回对象的每个可枚举的自身属性键值组成的数组
-                
+```js
                 Object.prototype.myValues = function(o) {
                     let arr = []
                     for(let key in o) {
@@ -1515,8 +1666,11 @@
                     }
                     return arr;
                 }
+```
+
 #### 2) Object.entrie
 > - 返回对象的每个可枚举的自身属性键名和键值组成的数组
+```js
                 Object.prototype.myEntries = function(o) {
                     let arr = []
                     for(let key in o) {
@@ -1524,13 +1678,14 @@
                     }
                     return arr;
                 }
+```
 
-<h3 id='3.10'>3.10 setTimeout 与 setInterval</h3>
+### 3.10 setTimeout 与 setInterval
                 
 #### 1) 最短间隔时间
 > - 如果回调时间大于间隔时间，浏览器才会执行，这也导致了真正的间隔时间比原来的大一点
 > - 这个最短间隔时间该怎么测呢？可以利用在定时器内再嵌一个定时器
-                
+```js
                 let timeList = [];
                 let f = function(total, delay) {
                     let sum = 0;
@@ -1550,14 +1705,15 @@
                 }
                 f(100, 1); // the shortest delayTime is 4.878787878787879 in chrome
                 f(1000, 1); // the shortest delayTime is  83.83883883883884 in chrome
+```
 
-<h3 id='3.11'>3.11 跨域</h3>
+### 3.11 跨域
                 
 #### 1) 通过document.domain跨域
 > - 在相同的域名下建立文件
 #### 2) 通过location.hash跨域
 > - 但是如果内嵌的页面不同源的话是无法拿到iframe的document的
-                
+```js
                 let src = 'https://www.baidu.com';
                 let msg = 'helloB'
                 function createIframe(src) {    
@@ -1600,10 +1756,12 @@
                     +  "  ifrproxy.appendChild(ifmScript);\n"
                     + "}"
                 i.contentWindow.document.body.appendChild(ifmScript);
+```
+
 #### 3) 通过postMessage
 > - 好像也做不了
 > - 需要判断源origin，否则容易收到XXR攻击
-                
+```js
                 let msgHandler = function(event) {
                     console.log('event.data', event.data);
                 }
@@ -1624,11 +1782,13 @@
                 let i = document.getElementsByTagName('iframe')[ document.getElementsByTagName('iframe').length - 1];
                 let iframe = i.contentWindow;
                 iframe.postMessage('hello world', 'https://segmentfault.com/a/1190000012264815');
+```
+
 #### 4) Jsonp
 > - 只支持GET，不支持POST请求
 > - 它只支持跨域HTTP请求这种情况，不能解决不同域的两个页面之间如何进行JavaScript调用的问题。
 > - 支持老版本的浏览器
-            
+```html
             // 自己的页面
             <script>
                 function exec(data) {
@@ -1641,10 +1801,12 @@
                 1，判断callback的名称；
                 2，处理数据data
                 3，返回js文件里面写着： exec(data);
+```
+
 #### 5) Access-Control-Allow-Origin
 > - 存在兼容性的问题，不兼容老版本的浏览器
 > - 服务器设置
-                
+```js   
                 //指定允许其他域名访问
                 'Access-Control-Allow-Origin:http://172.20.0.206'//一般用法（*，指定域，动态设置，但不允许携带认证头和cookies
                 //是否允许后续请求携带认证信息（cookies）,该值只能是true,否则不返回
@@ -1655,13 +1817,14 @@
                 'Access-Control-Allow-Methods:GET,POST,PUT,POST'
                 //允许的请求头字段
                 'Access-Control-Allow-Headers:x-requested-with,content-type'
+```
 
-<h3 id='3.12'>3.12 函数柯里化</h3>
+### 3.12 函数柯里化
                 
 #### 1) 定义
 > - 一个函数接受一些参数后返回一个新的函数，这个新的函数继续接收剩余的参数
 > - 比如：
-                
+```js     
                 // 原函数
                 function origin(a, b, c) {
 
@@ -1673,9 +1836,11 @@
 
                     }
                 }
+```
+
 #### 2) 两段不定参数版本
 > - 
-                
+```js  
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1692,6 +1857,7 @@
                 }
                 curry(1)(2); //[1, 2]
                 curry(1,2)(2,3,4); //  [1, 2, 2, 3, 4]
+```
 
 #### 3) 不定段不定参数版本
 > - 无限累加器
@@ -1699,7 +1865,7 @@
 >> - 改写函数的toSting()和valueOf()方法
 >> - 返回的函数作为参数收集器
 >> - 真正做处理方法是toSting()和valueOf()方法
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1726,16 +1892,17 @@
 
                     return _curry(...args);
                 }
+```
 
                 
-<h3 id='3.13'>3.13 高阶函数</h3>
+### 3.13 高阶函数
                 
 #### 1) 定义
 > - 接受一个或多个函数作为输入
 > - 输出一个函数
 #### 2) 实现一个map函数
 > - 挂靠在Array数组原型上
-                
+```js 
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1750,9 +1917,11 @@
                     }
                     return temp;
                 }
+```
+
 #### 3) 实现一个forEach函数
 > - 挂靠在Array数组原型上
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1765,9 +1934,11 @@
                         func(this[i], i, this);
                     }
                 }
+```
+
 #### 4) 实现一个reduce函数
 > - 挂靠在Array数组原型上
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1782,9 +1953,11 @@
                     }
                     return result;
                 }
+```
+
 #### 5) 实现一个filter函数
 > - 挂靠在Array数组原型上               
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1797,13 +1970,13 @@
                     while(l--) if(func(this[l])) arr.unshift(this[l]);
                     return arr;
                 }
-
+```
 
         
 ------      
         
-<h2 id='4'>四、正则表达式</h2>
-<h3 id='4.1'>4.1 断言</h3>
+## 四、正则表达式
+### 4.1 断言
             
 #### 1) 定义
 > - 断言前面或者后面有规定的字符串，但断言的字符串并不计入输出
@@ -1811,76 +1984,88 @@
 > - 向前断言 (?<=) (?<!)
 > - 向后断言 (?=) (?!)
             
-<h3 id='4.2'>4.2 反向引用</h3>
+### 4.2 反向引用
             
 #### 1) 定义
 > - \数字 表示前面匹配到的第n个分组,改分组必须与前面的分组字面上一模一样
-                
+```js
                 '168.132.132.132'.match(/(?:\d{1,3})(\.\d{1,3})\1{2}/);
                 // ["168.132.132.132", ".132", index: 0, input: "168.132.132.132", groups: undefined]
+```
+
 #### 2) 要点
 > - 非获取匹配分组 (?:)，用来忽视某个分组的
-                
+```js
                 '168.131.31.1'.match(/(?:\d{1,3})(\d{1,3}\.)\1{2}/)
-
+```
             
-<h3 id='4.3'>4.3 非贪婪</h3>
+### 4.3 非贪婪
             
 #### 1) 定义
 > - 用在{1，2}，+,*等后面，匹配最小的那个数量
             
-<h3 id='4.4'>4.4 电话号码/身份证/网址/邮箱</h3>
+### 4.4 电话号码/身份证/网址/邮箱
             
 #### 1) QQ号码
 > - 对QQ号码进行校验要求5~11位,不能以0开头,只能是数字
-                
+```js
                 /^[1-9]\d{4,10}$/.test('2606138901'); // true
                 /^[1-9]\d{4,10}$/.test('0606138901'); // false
+```
+
 #### 2) 电话号码
 > - 纯数字第一位必须是1开头第二位必须是3、4、5、7、8,第三位~第十一只要是数字即可
-                
+```js
                 /^1[34578]\d{9}$/.test('18028543872'); // true
                 /^1[34578]\d{9}$/.test('12028543872'); // false
+```
+
 #### 3) 身份证
 > - 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或者X或者x
-                
+```js
                 /(^\d{15}$)|(^\d{17}[\dxX]$)/.test('440782199309241618'); // true
                 /(^\d{15}$)|(^\d{17}[\dxX]$)/.test('44078219930924161X'); // true
                 /(^\d{15}$)|(^\d{17}[\dxX]$)/.test('44078219930924161s'); // false
+```
+
 #### 3) 网址
 > - DNS规定，域名中的标号都由英文字母和数字组成，每一个标号不超过63个字符，也不区分大小写字母。标号中除连字符（-）外不能使用其他的标点符号。级别最低的域名写在最左边，而级别最高的域名写在最右边。由多个标号组成的完整域名总共不超过255个字符。
-                
+```js
                 /^[hH][tT]{2}[pP][sS]?:\/\/(www\.)?([\w\d-~]{1,63}\.)+([\w\d-~\/])+$/.test('https://www.baidu.com'); //true
-
+```
 #### 4) 邮箱
 > - 
-                
+```js
                 /^[a-zA-Z0-9]+@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}$/.test('supersteelsoul@163.com'); // true
-
+```
 
         
 ------      
         
-<h2 id='6'>五、js和html效果篇</h2>
-<h3 id='6.1'>5.1 获取元素样式/位置/尺寸</h3>
+## 五、js和html效果篇
+### 5.1 获取元素样式/位置/尺寸
 
         
 #### 1) 样式
 > - element.getAttribute()方法 只能获取内联样式的内容
-                
+```js
                 var btn=element.getAttribute('style');
+```
+
 > - document.styleSheets 获取内嵌样式表或外联样式表，返回值是一个数组
-                
+```js           
                 var styleSheetList = document.styleSheets;
                 var styleSheet = styleSheetList[0];
                 var cssRuleList = styleSheet.rules;
                 var cssStyleRule = cssRuleList[0];
                 var styleDecl = cssStyleRule.style;
                 console.log(styleDecl.width);
+```
+
 > - class属性的操作
 >> - className
 >> - classList 兼容性问题。如果该类名不存在则会在元素中添加类名，并返回 true。 第二个是可选参数，是个布尔值用于设置元素是否强制添加或移除类，不管该类名是否存在.注意： Internet Explorer 或 Opera 12 及其更早版本不支持第二个参数。
-                
+```js
                 //元素名.className 需要操作字符串,每个类中间用空格隔开
                 var className = ele.className;
                 className.replace('classNameA', '').replace(/\s+/g, ' ');
@@ -1893,9 +2078,10 @@
                 classList.remove('className');
                 classList.contains(class)
                 classList.toggle(class, true|false) // 第一个参数为要在元素中移除的类名，并返回 false。
+```
 
 >> - 自定义类解决兼容性问题，可以兼容IE7
-                
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -1949,13 +2135,15 @@
                 < true
                 > div.listClass().list;
                 < "s_tab  s_ta" 
+```
+
 > - 获取实时计算的样式 getComputedStyle
 >> - 只读的，不能写。
 >> - 获取的是最终应用在元素上的所有CSS属性对象
 >> - currentStyle不能读取伪类，但是getComputedStyle可以
 >> - currentStyle是IE自娱自乐的玩意
 >> - 在访问例如background-color类似格式的css属性时
-                
+```js
                 window.getComputedStyle(ele,null).background-color //就不可以了，需要使用
                 window.getComputedStyle(ele,null).backgroundColor //可以
                 window.getComputedStyle(ele,null).getPropertyValue(“background-color”) // 可以
@@ -1988,6 +2176,7 @@
                 }
 
                 // ie7可能会返回auto值而不是实际的值
+```
 
 #### 2) 位置
 > - 元素的位置
@@ -1995,7 +2184,7 @@
 >> - getBoundingClientRect用于获取元素相对与浏览器视口的位置，它是一个对象
 >> - getClientRects和getClientRects都是元素边内界边缘相对于浏览器视口的距离
 >> - 想要获取元素边内界边缘相对于文档顶部的距离，需要用到offsetTop,offsetLeft和offsetParent
-                
+```js
                 getBoundingClientRect： {
                         top: '元素顶部相对于视口顶部的距离',
                         bottom: '元素底部相对于视口顶部的距离',
@@ -2006,8 +2195,10 @@
                         x: 8,
                         y: 8,
                     }
+```
+
 >> - 兼容性写法 因为IE没有height和width
-                
+```js
                 // 兼容写法
                  /**
                   * 
@@ -2037,8 +2228,10 @@
                             offsetLeft: offset(self).left //获取元素内边缘距离定位父元素的距离
                      }
                  }
+```
+
 >> - 一个例子
-                
+```js
                 // main.html
                 <div class="contain">
                     <div class="camera">
@@ -2084,6 +2277,7 @@
                  let camera = document.getElementsByClassName('camera')[0];
                  let cube = document.getElementsByClassName('cube')[0];
                  let camera = document.getElementsByClassName('camera')[0];
+```
 
 >>>>>> ![图5-1 元素位置a](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE5-1%20%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AEa.png?raw=true)
 >>>>>> ![图5-1 元素位置b](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE5-1%20%E5%85%83%E7%B4%A0%E4%BD%8D%E7%BD%AEb.png?raw=true)
@@ -2101,8 +2295,7 @@
 > - 元素内边距边缘距离文档顶部的距离
 >> - offsetTop 和 offsetLeft 都是相对于其内边距边界的。
 >> - HTMLElement.offsetParent 是一个只读属性，返回一个指向最近的定位父元素。如果没有定位的元素，则指向最近的 table 元素或根元素（标准模式下为 html；quirks 模式下为 body）。当元素的 style.display 设置为 "none" 时，offsetParent 返回 null。
-                
-
+```js
                 /**
                  * 
                  * @authors ${冰红茶} (${hblvsjtu@163.com})
@@ -2123,43 +2316,44 @@
                         outerWidth: window.outerWidth
                     }
                 }
+```
 
-<h3 id='5.2'>5.2 拖拽</h3>
-
-        
-#### 1) 行内元素
-> - 
-<h3 id='5.3'>5.3 图片懒加载</h3>
+### 5.2 拖拽
 
         
 #### 1) 行内元素
 > - 
-<h3 id='5.4'>5.4 轮播</h3>
+### 5.3 图片懒加载
 
         
 #### 1) 行内元素
 > - 
-<h3 id='5.5'>5.5 滑动</h3>
+### 5.4 轮播
 
         
 #### 1) 行内元素
 > - 
-<h3 id='5.6'>5.6 级联</h3>
+### 5.5 滑动
 
         
 #### 1) 行内元素
 > - 
-<h3 id='5.7'>5.7 图片剪裁</h3>
+### 5.6 级联
 
         
 #### 1) 行内元素
 > - 
-<h3 id='5.8'>5.8 图片压缩</h3>
+### 5.7 图片剪裁
 
         
 #### 1) 行内元素
 > - 
-<h3 id='5.9'>5.9 Tab</h3>
+### 5.8 图片压缩
+
+        
+#### 1) 行内元素
+> - 
+### 5.9 Tab
 
         
 #### 1) 行内元素
@@ -2168,13 +2362,13 @@
         
 ------      
         
-<h2 id='6'>六、CSS效果篇</h2>
-<h3 id='6.1'>6.1 水平居中</h3>
+## 六、CSS效果篇
+### 6.1 水平居中
 
         
 #### 1) 行内元素
 > - 父元素上text-align: center;
-                
+```html
                 // main.html
                 <div class="contain">
                     <span class="centerText">我是居中的行内元素</span>
@@ -2197,10 +2391,12 @@
                  .centerText {
                     background: #fff;
                 }
+```
+
 #### 2) 块级元素
 > - 定宽居中
 >> - 自身元素上margin: auto; 一定要写width;
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2224,10 +2420,12 @@
                     margin: auto;
                     background: #fff;
                 } 
+```
+
 > - inline-block不定宽居中
 >> - 把块状元素的显示值设置为inline-block
 >> - 然后使用行内元素的text-align: center;
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2251,9 +2449,11 @@
                     display: inline-block;
                     background: #fff;
                 }
+```
+
 > - 绝对定位不定宽居中
 >> - 注意IE8及以下不支持transform，其他的也需要加后缀
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2280,10 +2480,12 @@
                     transform: translateX(-50%);
                     background: #fff;
                 }
+```
+
 > - table-cell不定宽居中
 >> - 注意table-cell的特性有点像inline-block，需要设置width，而且不接受百分比，只接受数值，table-cell
 >> - IE6 IE7无效
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2309,15 +2511,16 @@
                     display: inline-block;
                     background: #fff;
                 } 
+```
 
 
-<h3 id='6.2'>6.2 垂直居中</h3>
+### 6.2 垂直居中
 
         
 #### 1) 行内元素
 > - 父元素需要设置行高
 > - 自身元素上设置vertical-align
-                
+```html
                 // main.html
                 <div class="contain">
                     <span class="centerText">我是居中的行内元素</span>
@@ -2341,13 +2544,15 @@
                  .centerText {
                     background: #fff;
                 }
+```
+
 #### 2) 块级元素
 > - line-height不定高居中
 >> - 父元素需要设置行高，高度将被行高顶起，相当于设了高度
 >> - 子元素设置vertical-align: middle，这是因为子元素被设为inline-block后，其基线将于内部文字的中线重合
 >> - 由于父元素的行高等于自身高度，而子元素的基线在内部文字的中线上，所以就变成竖直居中了
 >> - 会存在幽灵空白节点的问题，详细看[6.5 消除幽灵空格](#6.5)
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2373,11 +2578,12 @@
                     vertical-align: middle; 
                     background: #fff;
                 }
+```
 
 > - 绝对定位不定高居中
 >> - 注意IE8及以下不支持transform，其他的也需要加后缀
 >> - 父元素需要设置高度
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2405,12 +2611,14 @@
                     transform: translateY(-50%);
                     background: #fff;
                 }
+```
+
 > - table-cell不定高居中
 >> - 注意table-cell的特性有点像inline-block
 >> - 父元素需要设置计算值为table-cell，vertical-align: middle，高度不接受百分比，只接受数值，margin设置无效，响应padding设置
 >> - 不同于水平居中，子元素不必一定是inline-block，高度会自动适应
 >> - IE6 IE7无效
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2435,14 +2643,14 @@
                 .centerBlock {
                     background: #fff;
                 } 
-
+```
             
-<h3 id='6.3'>6.3 水平垂直居中</h3>
+### 6.3 水平垂直居中
 
         
 #### 1) 绝对定位auto方案
 > - 需要已知长度和高度
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2476,10 +2684,11 @@
                     margin: auto;
                     background: #fff;
                 }
+```
 
 #### 2) 绝对定位translate方案
 > - 不需要已知长度和高度
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2509,12 +2718,13 @@
                     transform: translate(-50%, -50%);
                     background: #fff;
                 }
+```
 
 #### 3) inline-block方案
 > - vertical-align and text-align
 > - 如果子元素内部有多行文字，且没有设vertical-align: middle;那么竖直方向上第一行会往上跳，居中对齐的是最后一行中间。
 > - 会存在幽灵空白节点的问题，详细看[6.5 消除幽灵空格](#6.5)
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2534,11 +2744,12 @@
                     vertical-align: middle;
                     background: #fff;
                 }
+```
 
 #### 4) table-cell方案
 > - 不需要理会行高的问题，只用text-align和vertical-align就能保证
 > - 自身元素计算值设为inline-block
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="centerBlock">我是居中的块级元素</div>
@@ -2566,9 +2777,9 @@
                     display: inline-block;
                     background: #fff;
                 }
-     
+```
         
-<h3 id='6.4'>6.4 清除浮动</h3>
+### 6.4 清除浮动
 
         
 #### 1) 原因
@@ -2590,7 +2801,7 @@
 >> - overflow为auto，scroll，hidden
 >> - display的值为table-cell、table-caption和inline-block
 >>>>> ![图6-1 清除浮动](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE6-1%20%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8.png?raw=true)
-                
+```html
                 // main.html
                 <div class="contain">
                     <div class="floatBlock">我是正常元素</div>
@@ -2668,9 +2879,9 @@
                 .contain:nth-child(6) {
                     position: absolute;
                 }
-
+```
         
-<h3 id='6.5'>6.5 幽灵空白节点</h3>
+### 6.5 幽灵空白节点
 
         
 #### 1) W3C规范
@@ -2680,7 +2891,7 @@
 #### 2) 如何消除呢？
 > - 设置父元素font-size为0，然后再把子元素的font-size恢复
         
-<h3 id='6.6'>6.6 三列布局</h3>
+### 6.6 三列布局
 
         
 #### 1) 双飞翼布局
@@ -2691,7 +2902,7 @@
 > - margin-left: -100%; //使得左栏放到上一行的最左边
 > - margin-left: -右栏宽度; //使得右栏放到上一行的最右边
 > - 为了避免中间栏被挤掉，需要设置body的最小宽度
-                
+```html
                 // main.html
                 <div class="container column">
                     <div class="center"></div>
@@ -2739,9 +2950,10 @@
                   margin-left: -150px;
                   background: green; 
                 }
+```
 
 > - 不用div包裹内部center的版本 目前需要计算计算calc(100%-350px)，calc()支持到IE9。
-                
+```html
                 // main.html
                 <div class="center column"></div>
                 <div class="left column"></div>
@@ -2783,14 +2995,13 @@
                     margin-left: -150px;
                     background: green; 
                 }
-                
+```
 
 #### 2) 圣杯布局
 > - 多一个div作为container
 > - container的左右padding为左右栏留出空位
 > - 左右栏使用relative作平移补偿
-    
-
+```html
                 // main.html
                 <div class="container">
                     <div class="center column"></div>
@@ -2842,12 +3053,13 @@
                     margin-left: -150px;
                     background: green; 
                 }
+```
 
 #### 3) 简单float布局
 > - 左右分别来一个float，中间用margin撑开
 > - center只能放在下面，否则会挤掉left和right
 > - 缺点：center最后才渲染，而且center的文字流会收到left和right的影响
-                
+```html
                 // main.html
                 <div class="left"></div>
                 <div class="right"></div>
@@ -2886,11 +3098,13 @@
                     height: 100px;
                     background: green; 
                 }
+```
+
 #### 4) 绝对float布局
 > 多一个div作为包裹
 > 简单易用，兼容性好
 > 中间最先出
-                
+```html
                 // main.html
                 <div class="container">
                     <div class="center"></div>
@@ -2939,11 +3153,13 @@
                     height: 100px;
                     background: green; 
                 }
+```
+
 #### 5) 绝对布局
 > 多一个div作为包裹
 > 简单易用，兼容性好
 > 中间最先出
-                
+```html
                 // main.html
                 <div class="container">
                     <div class="center"></div>
@@ -2996,8 +3212,9 @@
                     width: 150px;
                     background: green; 
                 }
+```
 
-<h3 id='6.7'>6.7 弹性布局</h3>
+### 6.7 弹性布局
 
       
 #### 1) 容器
@@ -3048,98 +3265,100 @@
                 计算的子元素的宽度 = (flex-basis) - 收缩单位*(flex-shrink)
 #### 9) 手写一个圣杯布局
 > - 包括header,nav,main,aside,footer
-                
-                // mian.html
-                <header>header</header>
-                <div class="container">
-                    <main>main</main>
-                    <nav>nav</nav>
-                    <aside>aside</aside>
-                </div>
-                <footer>footer</footer>
+```html
+        // mian.html
+        <header>header</header>
+        <div class="container">
+            <main>main</main>
+            <nav>nav</nav>
+            <aside>aside</aside>
+        </div>
+        <footer>footer</footer>
 
 
-                // mian.css
-                @charset "UTF-8";
-                /**
-                 * 
-                 * @authors ${冰红茶} (${hblvsjtu@163.com})
-                 * @date    2019-07-31
-                 * @version $0.0.1$
-                 */
+        // mian.css
+        @charset "UTF-8";
+        /**
+         * 
+         * @authors ${冰红茶} (${hblvsjtu@163.com})
+         * @date    2019-07-31
+         * @version $0.0.1$
+         */
 
-                body {
-                    display: flex;
-                    flex-flow: column wrap; 
-                    min-width: 350px;
-                    min-height: 500px;
-                    height: 100%;
-                }
+        body {
+            display: flex;
+            flex-flow: column wrap; 
+            min-width: 350px;
+            min-height: 500px;
+            height: 100%;
+        }
 
-                header,
-                footer {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    flex: 0 0 100px;
-                    background: gray;
-                }
+        header,
+        footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 0 0 100px;
+            background: gray;
+        }
 
-                header {
-                    order: 1;
-                }
+        header {
+            order: 1;
+        }
 
-                footer {
-                    order: 3;
-                }
+        footer {
+            order: 3;
+        }
 
-                .container {
-                    display: flex;
-                    flex-flow: row nowrap;
-                    order: 2;
-                    flex: 1 1 auto;
-                }
+        .container {
+            display: flex;
+            flex-flow: row nowrap;
+            order: 2;
+            flex: 1 1 auto;
+        }
 
-                .container main {
-                    order: 2;
-                    flex: 1 1 auto;
-                    background: red;
-                }
+        .container main {
+            order: 2;
+            flex: 1 1 auto;
+            background: red;
+        }
 
-                .container nav {
-                    order: 1;
-                    flex: 0 0 200px;
-                    background: yellow;
-                }
+        .container nav {
+            order: 1;
+            flex: 0 0 200px;
+            background: yellow;
+        }
 
-                .container aside {
-                    order: 3;
-                    flex: 0 0 150px;
-                    background: green;
-                }
+        .container aside {
+            order: 3;
+            flex: 0 0 150px;
+            background: green;
+        }
 
-                .container main,
-                .container nav,
-                .container aside {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
+        .container main,
+        .container nav,
+        .container aside {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+```
+
 >>>>>> ![图6-2 flex圣杯布局](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE6-2%20flex%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80.png?raw=true)
 
-<h3 id='6.8'>6.8 响应式布局</h3>
+### 6.8 响应式布局
 
         
 #### 1) null
 > -
         
 
-<h3 id='6.9'>6.9 变形动画</h3>
+### 6.9 变形动画
 
         
 #### 1) 二维动画
 > - 引自[落霞与孤鹜齐飞](https://segmentfault.com/a/1190000015236871)
-                
+```html 
                 transform: translate(x, y); 沿着 X 和 Y 轴移动元素。
                 transform: translate(100px, 100px);
 
@@ -3156,12 +3375,14 @@
                 transform-origin: right bottom;
 
                 transform: translateX(45px) rotate(45deg); 合并简写
+```
+
 #### 2) 三维动画
 > - 引自[落霞与孤鹜齐飞](https://segmentfault.com/a/1190000015236871)
 > - preserve-3d：保证所有子元素都处于同一个三维空间
 > - perspective定义摄像机（也就是作为观众的我们）到屏幕的距离
 > - perspective-origin定义摄像机观察到的画面中的灭点（vanishing point）的位置
-                
+```html
                 transform-style: preserve-3d;
                 perspective: 24px;  设置元素被查看位置的视图  
                 perspective-oragin: center center; 改变视点的位置
@@ -3180,9 +3401,9 @@
                 transform: scaleX();
                 transform: scaleY();
                 transform: scaleZ();
+```
 
-
-<h3 id='6.10'>6.10 补间动画</h3>
+### 6.10 补间动画
 
         
 #### 1) null
@@ -3191,8 +3412,8 @@
         
 ------      
         
-<h2 id='9'>九、浏览器篇</h2>
-<h3 id='9.3'>9.3 defer和async的区别</h3>
+## 九、浏览器篇
+### 9.3 defer和async的区别
 
         
 #### 1) 相同点
@@ -3202,7 +3423,7 @@
 > - async的脚本是看那个脚本最先下载完成先执行，跟写在HTML上的顺序是不同的
 > - defer实在DOM解析完成后，DOMContentLoaded 事件触发之前完成的，一般是按照写在HTML上的顺序执行，但是实际体验下来这个顺序不能保证
 >>>>>> ![图9-1 async和defer的区别](https://github.com/hblvsjtu/FET/blob/master/picture/%E5%9B%BE9-1%20async%E5%92%8Cdefer%E7%9A%84%E5%8C%BA%E5%88%AB.png?raw=true)
-<h3 id='9.5'>9.5 浏览器性能和计时器</h3>
+### 9.5 浏览器性能和计时器
 
         
 #### 1) 高消耗的样式
@@ -3221,7 +3442,7 @@
 > - GPU加速可以不仅应用于3D，而且也可以应用于2D，常用的场合：Canvas2D，布局合成（Layout Compositing）, CSS3转换（transitions），CSS3 3D变换（transforms），WebGL和视频(video)。
 > - 所以如果需要提升transforms的性能，可以强制为它开启3D，如transform: translate3d(10px, 10px, 0);
 > - 或者使用"transform:translateZ(0);
-                
+```css 
                 .cube { 
                     -webkit-transform: translateZ(0); 
                     -moz-transform: translateZ(0); 
@@ -3229,8 +3450,9 @@
                     -o-transform: translateZ(0); 
                     transform: translateZ(0);
                 }
+```
 > - 在 Chrome 和 Safari中， 以下声明可以解决转换或动画可能会看到闪烁的效果
-                
+```css
                 .cube { 
                     -webkit-backface-visibility: hidden;
                     -moz-backface-visibility: hidden;
@@ -3240,7 +3462,8 @@
                     -moz-perspective: 1000;
                     -ms-perspective: 1000;
                     perspective: 1000;
-                }   
+                }
+```
 > - 那问题来了，为什么开启3D来打开GPU加速可以优化动画性能呢？因为浏览器DOM渲染需要经过重排和重绘两个过程，其中重排的消耗最大。那问题就来到如果减少重排和重绘，甚至避免重排和重绘，借此提高动画的性能。动画是有帧组成的连续画面，开启GPU加速，即是GPU计算'层'，或者叫「纹理」，实际上是是DOM快照，通过已知变换矩阵来修改'层'，实质上是位图，来避免DOM的重排和重绘。
 > - 那问题又来了：什么情况下会触发层的创建呢？引自[chokcoco的回答](https://github.com/ccforward/cc/issues/42)
 >> - 3D 或透视变换(perspective、transform) CSS 属性
@@ -3249,7 +3472,7 @@
 >> - 混合插件(如 Flash)
 >> - 对自己的 opacity 做 CSS 动画或使用一个动画变换的元素
 >> - 拥有加速 CSS 过滤器的元素， 如：
-                
+```css      
                 filter: brightness(50%); // 明度滤镜
                 filter: saturate(1000%); // 饱和度滤镜
                 filter: blur(5px); // 模糊滤镜
@@ -3257,14 +3480,14 @@
                 filter: invert(100%); // 颜色反转滤镜
                 filter: contrast(25%); // 对比度滤镜
                 filter: drop-shadow(5px 5px 5px red); //阴影滤镜 第一个值是X方向上的位移，第二个值是Y轴方向上的位移，第三个值是模糊的大小，第四个值是模糊的颜色。
-
+```
 >> - 元素有一个包含复合层的后代节点，换句话说，就是一个元素拥有一个子元素，该子元素在自己的层里)
 >> - 元素有一个 z-index 较低且包含一个复合层的兄弟元素(换句话说就是该元素在复合层上面渲染
             
 ------      
         
-<h2 id='10'>十、V8引擎篇</h2>
-<h3 id='10.0'>10.0 事件循环</h3>
+<h2 id='10'>十、V8引擎篇
+### 10.0 事件循环
 
         
 #### 1) 主线程
