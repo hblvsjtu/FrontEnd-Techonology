@@ -101,15 +101,19 @@
       - [3) 实现一个forEach函数](#3-实现一个foreach函数)
       - [4) 实现一个reduce函数](#4-实现一个reduce函数)
       - [5) 实现一个filter函数](#5-实现一个filter函数)
+    - [3.14 迭代器](#314-迭代器)
+      - [1) 定义](#1-定义-2)
+    - [3.15 instanceof](#315-instanceof)
+      - [1) 定义](#1-定义-3)
   - [四、正则表达式](#四正则表达式)
     - [4.1 断言](#41-断言)
-      - [1) 定义](#1-定义-2)
+      - [1) 定义](#1-定义-4)
       - [2) 类型](#2-类型)
     - [4.2 反向引用](#42-反向引用)
-      - [1) 定义](#1-定义-3)
+      - [1) 定义](#1-定义-5)
       - [2) 要点](#2-要点)
     - [4.3 非贪婪](#43-非贪婪)
-      - [1) 定义](#1-定义-4)
+      - [1) 定义](#1-定义-6)
     - [4.4 电话号码/身份证/网址/邮箱](#44-电话号码身份证网址邮箱)
       - [1) QQ号码](#1-qq号码)
       - [2) 电话号码](#2-电话号码)
@@ -2002,8 +2006,7 @@
                     return _curry(...args);
                 }
 ```
-
-                
+             
 ### 3.13 高阶函数
                 
 #### 1) 定义
@@ -2031,37 +2034,36 @@
 #### 3) 实现一个forEach函数
 > - 挂靠在Array数组原型上
 ```js
-                /**
-                 * 
-                 * @authors ${冰红茶} (${hblvsjtu@163.com})
-                 * @date    2019-08-01
-                 * @version $Id$
-                 */
-                Array.prototype.myForEach = function(func) {
-                    let l = this.length;
-                    for(let i = 0; i < l; i++) {
-                        func(this[i], i, this);
-                    }
-                }
+        /**
+         * 
+         * @authors ${冰红茶} (${hblvsjtu@163.com})
+         * @date    2019-08-01
+         * @version $Id$
+         */
+        Array.prototype.myForEach = function(func) {
+            let l = this.length;
+            for(let i = 0; i < l; i++) {
+                func(this[i], i, this);
+            }
+        }
 ```
 
 #### 4) 实现一个reduce函数
 > - 挂靠在Array数组原型上
 ```js
-                /**
-                 * 
-                 * @authors ${冰红茶} (${hblvsjtu@163.com})
-                 * @date    2019-08-01
-                 * @version $Id$
-                 */
-                Array.prototype.myReduce = function(func, init) {
-                    let l = this.length;
-                    let result = init ? init : 0;
-                    for(let i = 0; i < l; i++) {
-                        result = func(result, this[i], init);
-                    }
-                    return result;
-                }
+        /**
+         * 
+         * @authors ${冰红茶} (${hblvsjtu@163.com})
+         * @date    2019-08-01
+         * @version $Id$
+         */
+        Array.prototype.myReduce = function(func, init) {
+            let result = init;
+            for (var i = 0; i < this.length; i++) {
+                result = func(result, this[i], i);
+            }
+            return result;
+        }
 ```
 
 #### 5) 实现一个filter函数
@@ -2081,7 +2083,60 @@
                 }
 ```
 
-        
+             
+### 3.14 迭代器
+                
+#### 1) 定义
+
+```js
+        function iterator() {
+            let i = 0;
+            let me = this;
+            return {
+                next() {
+                    return {
+                        value: me[i],
+                        done: i++ >= me.length
+                    }
+                }
+            }
+        }
+        a = {
+            0: 0, 1: 1, 2: 2,
+            length: 3,
+            [Symbol.iterator]: iterator
+        };
+
+        for (i of a) {
+            console.log(i);
+        }
+        // 0 1 2
+```
+
+            
+### 3.15 instanceof
+                
+#### 1) 定义
+
+```js
+        // 递归版本
+        function myInstanceof(left, right) {
+            return !left
+                ? false
+                : left.__proto__ === right.prototype
+                    ? true
+                    : myInstanceof(left.__proto__, right);
+        }
+
+        // 循环版本
+        function myInstanceof(left, right) {
+            while(left && left.__proto__ !== right.prototype) {
+                left = left.__proto__;
+            }
+            return !!left;
+        }
+```
+
 ------      
         
 ## 四、正则表达式
@@ -2289,21 +2344,27 @@
 
 #### 2) 位置
 > - 元素的位置
->> - getClientRects 返回一个数组，但是该数组只有一个元素，而且是一个对象元素
->> - getBoundingClientRect用于获取元素相对与浏览器视口的位置，它是一个对象
->> - getClientRects和getClientRects都是元素边内界边缘相对于浏览器视口的距离
->> - 想要获取元素边内界边缘相对于文档顶部的距离，需要用到offsetTop,offsetLeft和offsetParent
+>> - ``getClientRects`` 返回一个数组，但是该数组只有一个元素，而且是一个对象元素，获取的是距离目标元素最近的父元素的距离
+>> - ``offsetTop``,``offsetLeft``和``offsetParent``，而非视窗距离
+>> - ``getBoundingClientRect``用于获取元素相对与浏览器视口的位置，它是一个对象
+>> - 想要获取元素边内界边缘相对于文档顶部的距离，需要用到``getBoundingClientRect``或者递归``offsetTop``和``offsetLeft``
 ```js
-                getBoundingClientRect： {
-                        top: '元素顶部相对于视口顶部的距离',
-                        bottom: '元素底部相对于视口顶部的距离',
-                        left: '元素左边相对于视口左边的距离',
-                        right: '元素右边相对于视口左边的距离',
-                        height: '元素高度',
-                        width: '元素宽度'
-                        x: 8,
-                        y: 8,
-                    }
+        // getBoundingClientRect方法
+        getBoundingClientRect: {
+            top: '元素顶部相对于视口顶部的距离',
+            bottom: '元素底部相对于视口顶部的距离',
+            left: '元素左边相对于视口左边的距离',
+            right: '元素右边相对于视口左边的距离',
+            height: '元素高度',
+            width: '元素宽度'
+            x: 8,
+            y: 8,
+        }
+
+        // 递归法
+        function getDistance(node) {
+            return node.parentNode ? getDistance(node.parentNode) + node.offsetTop : 0;
+        }
 ```
 
 >> - 兼容性写法 因为IE没有height和width
