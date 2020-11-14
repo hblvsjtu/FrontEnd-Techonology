@@ -7,6 +7,13 @@
 平常在生活中或者工作中不断的学习前端知识，记录和分享吾之所见吾之所悟^_ ^
 - [FET](#fet)
   - [作者：冰红茶](#作者冰红茶)
+  - [〇、基础知识篇](#〇基础知识篇)
+    - [0.1 this与闭包](#01-this与闭包)
+      - [1) this的优先级](#1-this的优先级)
+      - [2) 按顺序打印0～9](#2-按顺序打印09)
+      - [3) 变量提升和暂时性死区](#3-变量提升和暂时性死区)
+      - [4) 闭包](#4-闭包)
+      - [5) 内存泄漏的几种情况](#5-内存泄漏的几种情况)
   - [一、类型判断篇](#一类型判断篇)
     - [1.1 基本数字类型](#11-基本数字类型)
       - [1) null](#1-null)
@@ -186,11 +193,89 @@
 
         
 ------      
-        
+## 〇、基础知识篇
+### 0.1 this与闭包
+
+#### 1) this的优先级
+> - 箭头函数
+> - new
+> - call,apply,bind
+> - 对象的函数属性调用
+> - 全局window的函数属性调用
+
+#### 2) 按顺序打印0～9
+> - 1秒后同时打印0～9 关键点在于创造n个不同的独立作用域
+```js
+    // 闭包
+    for (var i = 0; i < 10; i++) {
+        (function(j) {
+            setTimeout(function() {console.log(j)}, 1000);
+        })(i);
+    }
+
+    // let
+    for (let i = 0; i < 10; i++) {
+        setTimeout(function() {console.log(a)}, 1000);
+    }
+```
+
+> - 每秒按顺序打印0～9
+```js
+        // setInterval法
+        i = 0;
+        timer = setInterval(function() {
+            console.log(i++);
+            if(i === 10) clearInterval(timer);
+        }, 1000);
+
+        // promise法
+        function getDelayPromise(i) {
+            return new Promise(function (resolve, reject){
+                setTimeout(function() {resolve(i)}, 1000);
+            })
+        };
+        var delay = getDelayPromise(0);
+        for (var i = 0; i < 10; i++) {
+            delay = delay.then(function(res) {
+                console.log(res);
+                return getDelayPromise(res + 1);
+            });
+        };
+
+        // await法
+        function getDelayPromise(i) {
+            return new Promise(function (resolve, reject){
+                setTimeout(function() {resolve(i)}, 1000);
+            })
+        };
+
+        (async function() {
+            for (var i = 0; i < 10; i++) {
+                console.log(await getDelayPromise(i));
+            }
+        })();
+}
+```
+
+#### 3) 变量提升和暂时性死区
+> - 这两个概念是相对而言的
+> - js 是一种解释性的语言 分为``预编译阶段``和``执行阶段``，``执行阶段``中解释一行然后执行一行。在预编译过程为了提前预先配好内存，中会对函数中的var变量声明部分提前提升至函数的开始，并赋值为undefined，然后在执行过程中再重新赋值。这个过程成为``变量提升``。而``let``和``const``则不那么幸运，``预编译阶段``不会被【提升】，所以从函数开始到变量声明前被成为``暂时性死区``，访问的时候会报``referenceError``引用错误。
+> - 函数的变量在预编译阶段被创建，在执行阶段被激活，在函数执行完毕后的下一个垃圾回收GC节点被回收，其上下文也会被销毁
+
+#### 4) 闭包
+> - 函数嵌套时，内部函数可访问了外部函数的作用域变量，哪怕内部函数是在全局环境下被调用
+> - 一般来说是全局环境是不可访问函数内部的变量的，但是通过闭包，就可以实现对函数内部变量的访问，并且不会污染全局变量
+> - 有个坏处，容易造成内存泄露，不用的时候需要把内部函数的引用置为null
+> - 闭包只使用内部函数在第一次建立时候的作用域链
+
+#### 5) 内存泄漏的几种情况
+> - 闭包
+> - 删除节点
+> - 设置事件监听
+
 ## 一、类型判断篇
 ### 1.1 基本数字类型
-
-        
+ 
 #### 1) null
 > - 直接跟v他自己比较即可
 ```js
@@ -583,24 +668,14 @@
                  * @version $Id$
                  */
 
-                Function.prototype.myCall = function(content) {
-                    content.func = this; //转移this
-                    let arr = [], l = arguments.length;
-                    while(l > 0) arr[--l] = arguments[l];
-                    arr.shift();
-                    return this(...arr);
+                function myCall(fn, context = window, ...ret) {
+                    const symbol = Symbol();
+                    context[symbol] = fn;
+                    const result = context[symbol](...ret);
+                    delete context[symbol];
+                    return result;
                 }
 
-                let a = function(num, num1) {
-                    this.num = this.num ? this.num + num1 : num;
-                    console.log(this.num);
-                }
-
-                let b = {num: 1};
-
-                a.myCall(b, 2, 3);
-
-                // 4
 ```
 
 #### 2) apply
@@ -1252,28 +1327,36 @@
 > - 防抖动是发生在操作与操作之间的时间空隙，拉长操作之间的延迟时间
 > - 截流是指在连续重复的操作中，保证每次的操作时间周期，一般比操作实际运行的时间要长
 #### 3) 防抖动
+> - 最多存活一个，可能是第一个也有可能是最后一个
 > - 需要用到setTimeout
 > - 用bounce对回调函数进行包装
 > - 注意setTimeout和的作用域：内部延迟执行的代码中的this永远指向window，但是回调函数本身的this可以指向其他，所以setTimeout需要先在全局进行定义。
 ```js
-                /**
-                 * 
-                 * @authors ${冰红茶} (${hblvsjtu@163.com})
-                 * @date    2019-08-01
-                 * @version $Id$
-                 */
-                let myTimer;
-                let deBounce = function(delayTime, callback) {
-                    clearTimeout(myTimer);
-                    myTimer = setTimeout(function() {
-                            if(callback) callback()
-                            console.log('用户的操作。。。');
-                        }, delayTime);
+        /**
+         * 
+         * @authors ${冰红茶} (${hblvsjtu@163.com})
+         * @date    2019-08-01
+         * @version $Id$
+         */
+        function debounce(cb, delay, isImmediate) {
+            let timer; //   利用闭包设置定时器，同时肩负是否立即执行的状态
+            return function(...ret) { // 返回函数
+                if (isImmediate) {
+                    if (timer) clearTimeout(timer);
+                    else cb(...ret);
+                    timer = setTimeout(function() {
+                        timer = null;
+                    }, delay)
                 }
+                else {
+                    if (timer) clearTimeout(timer);
+                    timer = setTimeout(function() {cb(...ret);}, delay)
+                }
+            }
+        }
 
-                document.addEventListener('click', function() {
-                    deBounce(3000);
-                });
+        a = debounce(function() {console.log(123)}, 2000, true);
+        document.addEventListener('click', a);
 ```
 
 #### 4) 截流/频率控制
@@ -1281,27 +1364,36 @@
 > - 立即执行，无需使用setTimeout
 > - 如果实际运行时间长度 > 设定的周期时间, 则运行回调，并且把当前时间戳设为旧时间戳；
 ```js
-                /**
-                 * 
-                 * @authors ${冰红茶} (${hblvsjtu@163.com})
-                 * @date    2019-08-01
-                 * @version $Id$
-                 */
-
-                let old = new Date();
-                let throttle = function(cycleTime, callback) {
-                    let now = new Date();
-                    if (now - old > cycleTime) {
-                        if (callback) callback();
-                        old = now;
+        /**
+         * 
+         * @authors ${冰红茶} (${hblvsjtu@163.com})
+         * @date    2019-08-01
+         * @version $Id$
+         */
+        function throttle(cb, delay, isImmediate) {
+            let timer; //   利用闭包设置定时器，同时肩负是否立即执行的状态
+            return function(...ret) { // 返回函数
+                if (isImmediate) {
+                    if (!timer) {
+                        cb(...ret);
+                        timer = setTimeout(function() {
+                            timer = null;
+                        }, delay);
                     }
                 }
+                else {
+                    if (!timer) {
+                        timer = setTimeout(function() {
+                            cb(...ret);
+                            timer = null;
+                        }, delay);
+                    }
+                }
+            }
+        }
 
-                document.addEventListener('click', function() {
-                    throttle(3000, function() {
-                            console.log('i am working');
-                        });
-                });
+        a = throttle(function() {console.log(123)}, 2000, true);
+        document.addEventListener('click', a);
 ```
 
 #### 5) 防抖动和截流合并
@@ -1597,10 +1689,27 @@
 ### 3.7 new
                 
 #### 1) 要点
-> - 返回一个对象
-> - 对象的原型属性等于函数的原型
-> - 对象的属性需要函数去更换自身的作用域为对象的作用域获得
+> - 创建一个空对象
+> - 函数的作用域指向该对象
+> - 对象获取函数的属性和方法
+> - 返回新的对象(需要注意的是，假如函数返回的是一个对象，那么最终返回的不是之前创建的空对象，而是函数的返回值)
 ```js
+                // 方法一
+                function myNew(func, ...res) {
+                    const obj = {};
+                    obj.__proto__ = func.prototype;
+                    const result = func.call(obj, ...res);
+                    return typeof result === 'object' ? result : obj;
+                }
+
+                // 方法二
+                function myNew(func, ...res) {
+                    const obj = Object.create(func.prototype);
+                    const result = func.call(obj, ...res);
+                    return typeof result === 'object' ? result : obj;
+                }
+
+                // 方法三
                 Function.prototype.myNew = function() {
                     let obj = {};
                     obj.__proto__ = this.prototype;
