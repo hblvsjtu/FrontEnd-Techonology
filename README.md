@@ -61,6 +61,7 @@
       - [2) Deferred/promise](#2-deferredpromise)
       - [2) Promise(第一次自己写的)](#2-promise第一次自己写的)
       - [3) Promise(看了别人代码后自己写的)](#3-promise看了别人代码后自己写的)
+      - [4) Promise自己再次尝试写2.0](#4-promise自己再次尝试写20)
     - [3.4 观察者模式](#34-观察者模式)
       - [1) 要点](#1-要点)
       - [2) 代码](#2-代码)
@@ -1197,41 +1198,41 @@
         })
             }
             static resolve(val) {
-        return val instanceof MyPromise ? val : new MyPromise((resolve, reject) => {
-            resolve(val);
+                return val instanceof MyPromise ? val : new MyPromise((resolve, reject) => {
+                    resolve(val);
             })
             }
             static reject(err) {
-        return new MyPromise((resolve, reject) => {
-            reject(err);
-        })
+                return new MyPromise((resolve, reject) => {
+                    reject(err);
+                })
             }
 
             static catch(rejected) {
-        return this.then(undefined, rejected);
+                return this.then(undefined, rejected);
             }
 
             static all(promiseArr) {
-        let res = [];
-        let num = 0;
-        return new MyPromise((resolve, reject) => {
-            promiseArr.forEach(item => {
-                this.resolve(item).then(argu => {
-                    res.push(argu);
-                    num++;
-                    if (num === promiseArr.length)
-                resolve(res)
-                }, error => reject(error))
-            })
-        });
+                let res = [];
+                let num = 0;
+                return new MyPromise((resolve, reject) => {
+                    promiseArr.forEach(item => {
+                        this.resolve(item).then(argu => {
+                            res.push(argu);
+                            num++;
+                            if (num === promiseArr.length)
+                        resolve(res)
+                        }, error => reject(error))
+                    })
+                });
             }
 
             static race(promiseArr) {
-        return new MyPromise((resolve, reject) => {
-            promiseArr.forEach(item => {
-                this.resolve(item).then(res => resolve(res), err => reject(err));
-            })
-        })
+                return new MyPromise((resolve, reject) => {
+                    promiseArr.forEach(item => {
+                        this.resolve(item).then(res => resolve(res), err => reject(err));
+                    })
+                })
             }
         }
 
@@ -1307,7 +1308,155 @@
 
         // fulfilled =  (3) [9, 8, 7]
 ```
-        
+
+#### 4) Promise自己再次尝试写2.0
+> -
+```js
+        const PENDING = 'pending';
+        const ONFULFILLED = 'onFulfilled';
+        const ONREJECTED = 'onRejected';
+
+        function MyPromise(cb) {
+            this.status = PENDING;
+            this.onFulfilledList = [];
+            this.onRejectedList = [];
+            const self = this;
+            function resolve(value) {
+                setTimeout(function() {
+                    if (self.status === PENDING) {
+                        self.status = ONFULFILLED;
+                        self.value = self.onFulfilledList.reduce(
+                            (res, onFulfilled) => onFulfilled(res),
+                            value
+                        );
+                    }
+                }, 0);
+            }
+            function reject(reason) {
+                setTimeout(function() {
+                    if (self.status === PENDING) {
+                        self.status = ONREJECTED;
+                        self.reason = self.onRejectedList.reduce(
+                            (res, onFulfilled) => onFulfilled(res),
+                            reason
+                        );
+                    }
+                }, 0);
+            }
+            try {
+                cb(resolve, reject);
+            }
+            catch(err) {
+                reject(err);
+                if (this.status = PENDING) {
+                    this.status = ONREJECTED;
+                }
+            }
+            return this;
+        }
+
+        // 简化版 resolvePromise
+        function resolvePromise(nextPromise, result, resolve, reject) {
+            if (nextPromise === result) {
+                throw new Error('循环引用');
+            }
+            if (result instanceof MyPromise) {
+                result.then(resolve, reject);
+            }
+            else {
+                try {
+                    resolve(result);
+                }
+                catch(reason) {
+                    reject(reason);
+                }
+            }
+        };
+
+        MyPromise.prototype.then = function(onFulfilled, onRejected) {
+            onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : data => data;
+            onRejected = typeof onRejected === 'function' ? onRejected : error => {throw error};
+            let nextPromise;
+            if (this.status === ONFULFILLED) {
+                nextPromise = new MyPromise((resolve, reject) => {
+                    setTimeout(res => {
+                        try {
+                            const result = onFulfilled(res);
+                            resolvePromise(nextPromise, result, resolve, reject);
+                        }
+                        catch(err) {
+                            onRejected(err);
+                        }
+                    }, 0);
+                })
+            }
+            if (this.status === ONREJECTED) {
+                nextPromise = new MyPromise((resolve, reject) => {
+                    setTimeout(res => {
+                        try {
+                            const result = onRejected(res);
+                            resolvePromise(nextPromise, result, resolve, reject);
+                        }
+                        catch(reason) {
+                            onRejected(reason);
+                        }
+                    }, 0);
+                })
+            }
+            if (this.status === PENDING) {
+                nextPromise = new MyPromise((resolve, reject) => {
+                    this.onFulfilledList.push(res => {
+                        try {
+                            const result = onFulfilled(res);
+                            resolvePromise(nextPromise, result, resolve, reject);
+                        }
+                        catch(err) {
+                            onRejected(err);
+                        }
+                    })
+                    this.onRejectedList.push(
+                        res => {
+                            try {
+                                const result = onRejected(res);
+                                resolvePromise(nextPromise, result, resolve, reject);
+                            }
+                            catch(reason) {
+                                onRejected(reason);
+                            }
+                        }
+                    );
+
+                })
+            }
+            return nextPromise;
+        }
+
+        MyPromise.resolve = function(data) {
+            return new MyPromise(resolve => resolve(data));
+        }
+
+        MyPromise.all = function(promiseList) {
+            return new MyPromise((resolve, reject) => {
+                const result = [];
+                promiseList.forEach(promise => {
+                    promise.then(data => {
+                        result.push(data);
+                        if (result.length === promiseList.length) {
+                            resolve(result);
+                        }
+                    })
+                })
+            })
+        }
+
+        MyPromise.race = function(promiseList) {
+            return new MyPromise((resolve, reject) =>
+                promiseList.forEach(promise =>
+                    promise.then(resolve, reject)
+                )
+            );
+        }
+```
                 
 ### 3.4 观察者模式
         
@@ -1317,12 +1466,12 @@
 > - 监听器注册表：
 ```js
         let _registers = [
-                    {
-                        type: '',
-                        listener: ''
-                    },
-                    ...
-                ]
+            {
+                type: '',
+                listener: ''
+            },
+            ...
+        ]
 ```
 
 > - 监听器列表：
