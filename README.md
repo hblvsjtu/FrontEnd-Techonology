@@ -1,6 +1,6 @@
 # FET
 
-## 作者：冰红茶  
+## 作者：冰红茶
     
 ------    
     
@@ -72,6 +72,7 @@
       - [4) 截流/频率控制](#4-截流频率控制)
       - [5) 防抖动和截流合并](#5-防抖动和截流合并)
     - [3.6 类的继承](#36-类的继承)
+      - [本质上是在子类的私有属性中添加父类的私有属性，子类的公有属性中添加父类的公有属性](#本质上是在子类的私有属性中添加父类的私有属性子类的公有属性中添加父类的公有属性)
       - [1) 属性拷贝](#1-属性拷贝)
       - [2) 原型式继承](#2-原型式继承)
       - [3) 原型链继承](#3-原型链继承)
@@ -185,7 +186,28 @@
       - [1) 二维动画](#1-二维动画)
       - [2) 三维动画](#2-三维动画)
     - [6.10 补间动画](#610-补间动画)
-      - [1) null](#1-null-2)
+      - [1) animation](#1-animation)
+      - [2) border-radius](#2-border-radius)
+    - [6.11 画一个棋盘](#611-画一个棋盘)
+      - [1) linear-gradient](#1-linear-gradient)
+      - [2) backdround](#2-backdround)
+    - [6.12 画一个圆盘百分比](#612-画一个圆盘百分比)
+      - [1) animation](#1-animation-1)
+      - [2) border-radius](#2-border-radius-1)
+    - [6.13 多重边框](#613-多重边框)
+      - [1) 基本用法](#1-基本用法)
+    - [6.14 蚂蚁行军](#614-蚂蚁行军)
+      - [1) 基本用法](#1-基本用法-1)
+    - [6.15 梯形标签页](#615-梯形标签页)
+      - [1) 基本思路 outline和box-shadow并用](#1-基本思路-outline和box-shadow并用)
+    - [6.16 其他技巧](#616-其他技巧)
+      - [1) 元素换行](#1-元素换行)
+      - [2) 第一个元素跟后面的相同标签元素不一致属性](#2-第一个元素跟后面的相同标签元素不一致属性)
+      - [3) 文本中的斑马线](#3-文本中的斑马线)
+      - [4) tab字符数设置](#4-tab字符数设置)
+      - [5) 扩大点击范围](#5-扩大点击范围)
+      - [6) resize](#6-resize)
+      - [7) 紧贴底部](#7-紧贴底部)
   - [九、浏览器篇](#九浏览器篇)
     - [9.3 defer和async的区别](#93-defer和async的区别)
       - [1) 相同点](#1-相同点-1)
@@ -1649,7 +1671,8 @@
 ```
                 
 ### 3.6 类的继承
-        
+
+#### 本质上是在子类的私有属性中添加父类的私有属性，子类的公有属性中添加父类的公有属性   
 #### 1) 属性拷贝
 > - 这是最简单的，把父类的属性全都拷贝一份
 #### 2) 原型式继承
@@ -3792,11 +3815,313 @@
 
 ### 6.10 补间动画
 
-        
-#### 1) null
-> - 
+#### 1) animation
+> - ``animation-play-state: pasued; animation-delay: 负数时间``
+> - 可以让动画停留在任意时间点
+> - ``animation-timing-function: step-end`` 使得补间动画变成瞬间变化的动画
+#### 2) border-radius
+> - 使用斜竖杆/ 前面四位分别是左上右上右下左下的水平方向半径长度，后面四位分别是左上右上右下左下的竖直方向半径长度
+```html
+    <style>
+        .percent {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: #000;
+            animation: percentStatic 100s step-end infinite paused;
+        }
 
-        
+        @keyframes percentStatic {
+            50% {
+                background: green;
+            };
+        }
+    </style>
+    <div class="percent"></div>
+```
+
+
+### 6.11 画一个棋盘
+
+#### 1) linear-gradient
+> - 角度以竖直线为基准顺时针旋转的角度，单位``deg``或者``turn``（百分比 x / 360）
+> - 角度后跟着的是颜色stop，颜色stop由颜色和位置组成，没有位置就是默认百分比位置，如果后一个位置比前一个位置小，则默认变成前一个位置，而且颜色分界是分明的，这也是为什么有时候写位置0的原因
+> - 原理是两个l``inear-gradient``错位组合
+#### 2) backdround
+> - ``background-size``需要放在``background-position``之后，而且需要斜竖杆`` / ``分割
+> - background-position  默认是以padding-box为基准的， background-clip可以调整这个box，比如content-box
+```html
+    <style>
+        .qipan {
+            width: 500px;
+            height: 400px;
+            background: linear-gradient(45deg, #000 25%, transparent 0, transparent 75%,  #000 0) 0 0 / 50px 50px,
+                linear-gradient(45deg, red 25%, transparent 0, transparent 75%,  red 0) 25px 25px / 50px 50px;
+        }
+    </style>
+    <div class="qipan"></div>
+```
+
+### 6.12 画一个圆盘百分比
+#### 1) animation
+> - ``animation-play-state: pasued; animation-delay: 负数时间``
+> - 可以让动画停留在任意时间点
+> - ``animation-timing-function: step-end`` 使得补间动画变成瞬间变化的动画
+#### 2) border-radius
+> - 使用斜竖杆/ 前面四位分别是左上右上右下左下的水平方向半径长度，后面四位分别是左上右上右下左下的竖直方向半径长度
+```html
+    <style>
+        .percent {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: #000;
+            animation: percentStatic 100s step-end infinite paused;
+        }
+        .percent::before {
+            position: absolute;
+            content: '';
+            display: block;
+            margin-left: 50%;
+            width: 50%;
+            height: 100%;
+            border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+            background: green;
+            z-index: 2;
+        }
+        .percent::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            content: '';
+            display: block;
+            margin-left: 50%;
+            width: 50%;
+            height: 100%;
+            border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+            background: #000;
+            transform: rotate(0);
+            transform-origin: left center;
+            animation: percent 100s linear infinite paused,
+                percentMoving 100s step-end infinite paused;
+            animation-delay: inherit;
+            z-index: 3;
+        }
+
+        @keyframes percent {
+            100% {
+                transform: rotate(1turn);
+            };
+        }
+
+        @keyframes percentStatic {
+            50% {
+                background: green;
+            };
+        }
+
+        @keyframes percentMoving {
+            50% {
+                z-index: 1;
+                background: #000;
+            };
+        }
+    </style>
+    <div class="percent" style="animation-delay: -30s;"></div>
+```
+
+### 6.13 多重边框
+#### 1) 基本用法
+> - box-shadow: x偏移量 | y偏移量 | 阴影模糊半径 | 阴影扩散半径 | 阴影颜色
+> - 用逗号分割每一个边框，边框的位置会层层叠加
+```html
+    <style>
+        .multi-border {
+            width: 400px;
+            height: 400px;
+            box-shadow: 0 0 0 10px red,
+                0 0 0 20px green;
+        }
+    </style>
+    <div class="multi-border"></div>
+```
+
+### 6.14 蚂蚁行军
+#### 1) 基本用法
+> - ``background: padding-box linear-gradient(#fff, #fff)`` 渲染白色内背景
+> - ``background: border-box`` 渲染边框
+```html
+    <style>
+        ant-army {
+            width: 400px;
+            height: 400px;
+            padding: 10px;
+            border: 5px solid transparent;
+            background: padding-box linear-gradient(#fff, #fff),
+                border-box repeating-linear-gradient(45deg, #000 0, #000 12.5%, transparent 0, transparent 25%) 0 0 / 50px 50px;
+            animation: antArmy 5s linear infinite;
+    </style>
+    <div class="ant-army"></div>
+```
+
+### 6.15 梯形标签页
+#### 1) 基本思路 outline和box-shadow并用
+```html
+    <style>
+        .nav {
+            display: block;
+            padding: 0;
+            margin: 0;
+            height: 600px;
+            list-style: none;
+        }
+        .nav li {
+            position: relative;
+            display: inline-block;
+            padding: 1em 2em .2em 1em;
+            color: #fff;
+        }
+
+        .nav li + li {
+            margin-left: -20px;
+        }
+
+        .nav li:nth-of-type(2) {
+            z-index: 2;
+        }
+
+        .nav li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border: 1px #000 solid;
+            border-bottom: none;
+            border-radius: .5em .5em 0 0;
+            background: #891;
+            transform: perspect00o9ive(.5em) rotateX(5deg);
+            transform-origin: left bottom;
+            z-index: -1;
+        }
+        .nav > div {
+            margin-top: -1px;
+            height: 400px;
+            border: 1px #000 solid;
+            background: #891;
+        }
+    </style>
+    <ul class="nav">
+        <li>Home</li>
+        <li>Project</li>
+        <li>About</li>
+        <div>neirong</div>
+    </ul>
+```
+
+### 6.16 其他技巧
+#### 1) 元素换行
+```html
+    <style>
+        .huanhang {
+            p {
+                display: inline-block;
+            }
+            span::before {
+                content: '\A';
+                white-space: pre;
+            }
+        }
+    </style>
+    <div class="huanhang">
+        <p>标题1</p><span>内容1</span>
+        <p>标题2</p><span>内容2</span>
+        <p>标题3</p><span>内容3</span>
+    </div>
+```
+
+#### 2) 第一个元素跟后面的相同标签元素不一致属性
+> - 元素:not(:first-child)
+> - 元素 ～ 元素
+> - 元素 + 元素
+> - 建议使用最后一种
+```html
+    <style>
+        .nav li + li {
+            margin-left: -20px;
+        }
+    </style>
+```
+
+#### 3) 文本中的斑马线
+> - 使用``repeating-linear-gradient``
+```html
+    <style>
+        .zebra {
+            background: repeating-linear-gradient(red, red 1.5em, green 0, green 3em);
+        }
+
+        .zebra p {
+            margin: 0;
+            padding: 0;
+            line-height: 1.5em;
+        }
+    </style>
+    <div class="zebra">
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+	</div>
+```
+
+#### 4) tab字符数设置
+> - 使用``tab-size``
+
+#### 5) 扩大点击范围
+> - 使用``border`` 设置透明边框
+> - ``background-clip: padding-box``避免扩大背景范围
+> - 由于``border``被占用了，所以如果要设置边框的时候可以考虑使用``box-shadow``
+> - 另一种方案是使用伪元素，利用的正是伪元素可以代表宿主元素相应鼠标交互的特点
+```html
+    <style>
+        .pointer {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: 10px transparent solid;
+            background: red;
+        }
+    </style>
+    <div class="pointer"></div>
+```
+#### 6) resize
+> - 搭配overflow使用可以让用户手动调节元素的大小
+> - 可惜存在兼容性问题
+
+#### 7) 紧贴底部
+> - calc + vh方案
+> - flex + vh方案
+```html
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        body > article {
+            flex: 1 0 auto;
+        }
+    </style>
+    <body>
+	    <article></article>
+        <footer></footer>
+    </body>
+```
+
 ------      
         
 ## 九、浏览器篇

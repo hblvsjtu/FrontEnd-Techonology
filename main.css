@@ -31,4 +31,183 @@
  	background: green;
  }
 
+ .qipan {
+	width: 500px;
+	height: 400px;
+	background: linear-gradient(45deg, #000 25%, transparent 0, transparent 75%,  #000 0) 0 0 / 50px 50px,
+		linear-gradient(45deg, red 25%, transparent 0, transparent 75%,  red 0) 25px 25px / 50px 50px;
+ }
 
+ .percent {
+	position: relative;
+	width: 400px;
+	height: 400px;
+	border-radius: 50%;
+	background: #000;
+	animation: percentStatic 100s step-end infinite paused;
+}
+.percent::before {
+	position: absolute;
+	content: '';
+	display: block;
+	margin-left: 50%;
+	width: 50%;
+	height: 100%;
+	border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+	background: green;
+	z-index: 2;
+}
+.percent::after {
+	position: absolute;
+	top: 0;
+	right: 0;
+	content: '';
+	display: block;
+	margin-left: 50%;
+	width: 50%;
+	height: 100%;
+	border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+	background: #000;
+	transform: rotate(0);
+	transform-origin: left center;
+	animation: percent 100s linear infinite paused,
+		percentMoving 100s step-end infinite paused;
+	animation-delay: inherit;
+	z-index: 3;
+}
+
+@keyframes percent {
+	100% {
+		transform: rotate(1turn);
+	};
+}
+
+@keyframes percentStatic {
+	50% {
+		background: green;
+	};
+}
+
+@keyframes percentMoving {
+	50% {
+		z-index: 1;
+		background: #000;
+	};
+}
+
+.multi-border {
+	width: 400px;
+	height: 400px;
+	box-shadow: 0 0 0 10px red,
+		0 0 0 20px green;
+}
+
+.inner-radius {
+	width: 400px;
+	height: 400px;
+	border-radius: 10px;
+	box-shadow: 0 0 0 10px red;
+}
+
+.ant-army {
+	width: 400px;
+	height: 400px;
+	padding: 10px;
+	border: 5px solid transparent;
+	background: padding-box linear-gradient(#fff, #fff),
+		border-box repeating-linear-gradient(45deg, #000 0, #000 12.5%, transparent 0, transparent 25%) 0 0 / 50px 50px;
+	animation: antArmy 5s linear infinite;
+}
+
+@keyframes antArmy {
+	to {
+		background-position: 100%;
+	}
+}
+
+.nav {
+	display: block;
+	padding: 0;
+	margin: 0;
+	height: 600px;
+    list-style: none;
+}
+.nav li {
+	position: relative;
+	display: inline-block;
+    padding: 1em 2em .2em 1em;
+	color: #fff;
+}
+
+.nav li + li {
+	margin-left: -20px;
+}
+
+.nav li:nth-of-type(2) {
+	z-index: 2;
+}
+
+.nav li::before {
+	content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 1px #000 solid;
+    border-bottom: none;
+    border-radius: .5em .5em 0 0;
+    background: #891;
+    transform: perspective(.5em) rotateX(5deg);
+    transform-origin: left bottom;
+    z-index: -1;
+}
+.nav > div {
+	margin-top: -1px;
+	height: 400px;
+	border: 1px #000 solid;
+	background: #891;
+}
+
+.huanhang p {
+	display: inline-block;
+}
+
+.huanhang span::after {
+	content: '\A';
+	white-space: pre;
+}
+
+.zebra {
+	background: repeating-linear-gradient(red, red 1.5em, green 0, green 3em);
+}
+
+.zebra p {
+	margin: 0;
+	padding: 0;
+	line-height: 1.5em;
+}
+
+.pointer {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	border: 10px transparent solid;
+	background: red;
+	background-clip: padding-box;
+	resize: horizontal;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+body > article {
+	flex: 1 0 auto;
+}
+
+footer {
+	height: 100px;
+	background: #000;
+}
