@@ -131,7 +131,7 @@
       - [2) 位置](#2-位置)
     - [5.2 拖拽](#52-拖拽)
       - [1) 行内元素](#1-行内元素)
-    - [5.3 图片懒加载](#53-图片懒加载)
+    - [5.3 懒加载与虚拟列表](#53-懒加载与虚拟列表)
       - [1) 行内元素](#1-行内元素-1)
     - [5.4 轮播](#54-轮播)
       - [1) 行内元素](#1-行内元素-2)
@@ -2733,7 +2733,100 @@
         
 #### 1) 行内元素
 > - 
-### 5.3 图片懒加载
+### 5.3 懒加载与虚拟列表
+```js
+        /**
+         * 
+         * @authors ${冰红茶} (${hblvsjtu@163.com})
+         * @date    2021-04-12
+         * @version $Id$
+         */
+        import React, {memo, createRef, useState} from 'react';
+        import {throttle} from 'lodash';
+
+        const array = Array(10000).fill(0).map((item, index) => index);
+        const style = {
+            height: '50px', fontSize: '20px', border: '1px black solid',
+            textAlign: 'center', boxSizing: 'borderBox',
+            lineHeight: '50px'
+        };
+
+        const loadingStyle = {
+            margin: '10px auto',
+            fontSize: '16px',
+            textAlign: 'center',
+            color: 'red'
+        }
+
+        const Main = ({height = 50, viewportCount = 10, isVirtual = true, buffer = 100}) => {
+            const bufferCount = viewportCount * 1;
+            const containerHeight = height * viewportCount;
+            const container = createRef();
+            const [top, changeTopValue] = useState(0);
+            const [pageNum, changePageNum] = useState(1);
+            const [loading, changeLoadingState] = useState(false);
+            const [list, changeList] = useState(array.slice(0, bufferCount + viewportCount * pageNum));
+            const bufferHeight = isVirtual ? 0 : buffer;
+            async function renderList(currentPageNum) {
+                // 虚拟列表不支持异步获取数据
+                if (!isVirtual) {
+                    changeLoadingState(true);
+                    await new Promise(r => setTimeout(r, 8000));
+                    changeLoadingState(false);
+                }
+                const min = isVirtual ? viewportCount * (currentPageNum - 1) : 0;
+                const max = bufferCount + viewportCount * currentPageNum;
+                isVirtual && changeTopValue(containerHeight * (currentPageNum - 1));
+                changeList(array.slice(min, max));
+            }
+            function getCurrentPage() {
+                const {clientHeight, scrollTop} = container.current;
+                let currentPageNum = Math.ceil((scrollTop + bufferHeight) / clientHeight);
+                if (currentPageNum === 0 || currentPageNum === pageNum) {
+                    return;
+                }
+                currentPageNum = currentPageNum > pageNum ? pageNum + 1 : pageNum - 1; // 避免划得过快出现跳页
+                changePageNum(currentPageNum);
+                return currentPageNum;
+            }
+            async function handleScrollEvent() {
+                const currentPageNum = getCurrentPage();
+                if (!currentPageNum) {
+                    return;
+                }
+                await renderList(currentPageNum)
+            }
+            return (
+                <div ref={container}
+                    onScroll={isVirtual ? handleScrollEvent : throttle(handleScrollEvent, 500)}
+                    style={{height: `${containerHeight}px`, border: '1px red solid', overflow: 'auto'}}
+                >
+                    {
+                        isVirtual
+                            ? (
+                                <div style={{position: 'relative', height: '500000px'}}>
+                                    <div style={{position: 'absolute', width: "100%", top: top + 'px'}}>
+                                        {
+                                            list.map(item => <div key={item} style={style}>{item + 1}</div>)
+                                        }
+                                    </div>
+                                </div>
+                            )
+                            : (
+                                <div>
+                                    {list.map(item => <div key={item} style={style}>{item + 1}</div>)}
+                                    {
+                                        loading && <div style={loadingStyle}>数据加载中...</div>
+                                    }
+                                </div>
+                            )
+                    }
+                </div>
+            );
+        }
+
+        export default memo(Main);
+```
 
         
 #### 1) 行内元素
